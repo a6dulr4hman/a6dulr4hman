@@ -1,54 +1,39 @@
-# Hi There!
- 
-> **17 year old Full Stack Developer** based in Dubai.  
+# Hi, I'm a Developer based in Dubai.
 
-I don't just write code; I build ecosystems. From architecting neobanking solutions to developing AI-driven security tools for Web3, I focus on shipping products that work at scale.
+I build **fintech infrastructure**, **Web3 security tools**, and **self-hosted systems**.  
+Currently working on financial governance for students and automated smart contract auditing.
 
----
-
-### 🏆 Competitive Engineering & Awards
-
-| Placement | Competition | Project / Domain |
-| :--- | :--- | :--- |
-| 🥇 **1st Place** | **RIT Engineering Competition** | **SecuraBlock**: AI-driven Web3 vulnerability scanner. |
-| 🏆 **Best Project** | **Symbiosis STEM Expo** | **SecuraBlock**: Smart Contract auditing automation. |
-| 🥇 **Winner** | **NMS Magnificus Concursus** | **Algo**: Python Competitive Programming. |
-| 🥇 **1st Place** | **Heriot-Watt Data Science** | **Analytics**: Advanced Data Reporting. |
-| 🥉 **Bronze** | **GEMS Innovation Challenge** | **Fintech**: Digital banking infrastructure. |
+**Current Status:** Fiscally sponsored by [The Hack Foundation](https://hackclub.com/fiscal-sponsorship/).
 
 ---
 
-### 🚧 Featured Projects
+### 📂 Selected Projects
 
-#### 🛡️ **SecuraBlock** (Award Winning)
-*AI-Powered Web3 Security Infrastructure.*
-- An automated system that analyzes Blockchain smart contracts to detect and patch vulnerabilities before deployment.
-- **Stack:** Python, AI/ML, Solidity Analysis.
+#### [Horizon](https://github.com/falakme/horizon)
+**The Project:** A "neobank" style financial operating system designed for student organizations.
+**The Tech:** Handles double-entry ledger automation, internal transaction processing, and fund transparency.  
+`React` `Python` `PostgreSQL`
 
-#### 🏦 **The Falak Ecosystem**
-*A vertically integrated digital campus solution.*
-- **Horizon:** Internal fintech system for processing student transactions.
-- **ClarityAI:** Leveraging LLMs to provide intelligent assistance.
-- **GardenX:** Next-gen management tools for seamless operations.
+#### SecuraBlock
+**The Project:** An automated security auditor for Web3.
+**The Tech:** Scans Solidity smart contracts to detect vulnerabilities and logic flaws using static analysis and machine learning models.  
+`Python` `Solidity` `Machine Learning`
+
+#### Falak Ecosystem
+**The Project:** A suite of vertical apps for school digitization.
+* **GardenX:** Campus operations and event management.
+* **ClarityAI:** Context-aware LLM wrapper for student assistance.
+
+---
+
+### 🔧 Technical Stack
+
+**Languages** ![Python](https://img.shields.io/badge/-Python-333?style=flat) ![JavaScript](https://img.shields.io/badge/-JavaScript-333?style=flat) ![Solidity](https://img.shields.io/badge/-Solidity-333?style=flat) ![SQL](https://img.shields.io/badge/-SQL-333?style=flat) ![C
+
+**Infrastructure & Tools** ![Docker](https://img.shields.io/badge/-Docker-333?style=flat) ![Linux](https://img.shields.io/badge/-Linux-333?style=flat) ![Git](https://img.shields.io/badge/-Git-333?style=flat) ![Self--Hosting](https://img.shields.io/badge/-Self_Hosting-333?style=flat)
 
 ---
 
-### 🛠️ The Arsenal
-
-<p align="left">
-  <img src="https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/-React-61DAFB?style=flat&logo=react&logoColor=black" />
-  <img src="https://img.shields.io/badge/-Linux-FCC624?style=flat&logo=linux&logoColor=black" />
-  <img src="https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white" />
-  <img src="https://img.shields.io/badge/-Web3_Security-black?style=flat&logo=ethereum&logoColor=white" />
-</p>
-
-- **Infrastructure:** Self-hosting (Gitea, Docker) on bare-metal Linux.
-- **Interests:** High-Frequency Trading (HFT), Neobanking, DeFi Security.
-
----
-<p align="center">
-  <a href="mailto:abdulrahman@falak.me">
-    <img src="https://img.shields.io/badge/Let's_Connect-000?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
-</p>
+### ⚡ Activity
+* **Interests:** High-Frequency Trading (HFT), Decentralized Finance (DeFi), Homelabbing.
+* **Contact:** [your-email@example.com](mailto:your-email@example.com)
