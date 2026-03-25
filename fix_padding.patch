@@ -1,0 +1,11 @@
+--- src/components/Work.tsx
++++ src/components/Work.tsx
+@@ -19,7 +19,7 @@
+       const rect = box[0].getBoundingClientRect();
+       const parentWidth = box[0].parentElement!.getBoundingClientRect().width;
+       let padding: number =
+-        parseInt(window.getComputedStyle(box[0]).padding) / 2;
++        parseInt(window.getComputedStyle(box[0]).paddingLeft || "0") / 2;
+       translateX = rect.width * box.length - (rectLeft + parentWidth) + padding;
+ 
+       let timeline = gsap.timeline({

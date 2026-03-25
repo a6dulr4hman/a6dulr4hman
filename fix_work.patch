@@ -1,0 +1,28 @@
+--- src/components/styles/Work.css
++++ src/components/styles/Work.css
+@@ -204,6 +204,8 @@
+   .work-section {
+     height: auto;
+     min-height: auto;
++    max-width: 100vw;
++    overflow-x: hidden;
+   }
+ 
+   .work-flex {
+@@ -211,6 +213,8 @@
+     margin-left: 0;
+     padding-right: 0;
+     gap: 0;
+     width: 100%;
++    max-width: 100vw;
+   }
+ 
+   .work-flex::before,
+@@ -223,6 +227,7 @@
+     border-right: none;
+     border-bottom: 1px solid #363636;
+     gap: 20px;
++    max-width: 100%;
+   }
+ 
+   .work-flex .work-box:nth-child(even) {

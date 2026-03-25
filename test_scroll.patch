@@ -1,0 +1,17 @@
+--- src/index.css
++++ src/index.css
+@@ -29,14 +29,7 @@
+   body {
+     overflow: auto !important;
+-    height: auto !important;
+-    min-height: 100vh !important;
+-    touch-action: manipulation;
+-  }
+-
+-  html {
+     overflow-x: hidden !important;
+-    overflow-y: auto !important;
+-    touch-action: manipulation;
++    min-height: 100vh !important;
+   }
+ 

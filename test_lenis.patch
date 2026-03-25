@@ -1,0 +1,10 @@
+--- src/components/Navbar.tsx
++++ src/components/Navbar.tsx
+@@ -43,6 +43,9 @@
+     if (lenis) return;
+ 
++    if (window.innerWidth <= 768) return; // Disable Lenis on mobile
++
+     // Initialize Lenis smooth scroll
+     lenis = new Lenis({
+       duration: 1.7,

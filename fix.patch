@@ -1,0 +1,23 @@
+--- src/components/styles/Landing.css
++++ src/components/styles/Landing.css
+@@ -89,15 +89,17 @@
+   }
+ 
+-  /* Force static positioning to prevent overlaps */
++  /* Center the h2s */
+   .landing-info h2,
+   h2.landing-info-h2,
+   .landing-h2-1,
+   .landing-h2-info {
+-    position: static !important;
+     display: flex !important;
+-    flex-direction: column !important;
+-    align-items: center !important;
+     justify-content: center !important;
+-    width: 100%;
++    flex-wrap: wrap !important;
++    width: 100% !important;
+     margin: 0 auto !important;
++    position: relative !important;
+     font-size: 20px !important;
+     line-height: 1.5 !important;

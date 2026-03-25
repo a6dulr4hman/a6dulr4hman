@@ -1,0 +1,11 @@
+--- src/index.css
++++ src/index.css
+@@ -107,7 +107,6 @@
+ 
+ .main-body {
+-  max-width: 100vw;
+-  overflow-x: hidden;
++  width: 100%;
++  overflow: clip;
+   -webkit-overflow-scrolling: touch;
+ }

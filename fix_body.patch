@@ -1,0 +1,13 @@
+--- src/index.css
++++ src/index.css
+@@ -28,9 +28,8 @@
+ /* Allow scrolling on mobile */
+ @media only screen and (max-width: 768px) {
+   body {
+-    overflow: auto !important;
+-    overflow-x: hidden !important;
+     min-height: 100vh !important;
++    overflow-x: clip !important;
+   }
+ 
+   /* Ensure no fixed elements block scrolling */
