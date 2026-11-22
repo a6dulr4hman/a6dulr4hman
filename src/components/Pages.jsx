@@ -14,8 +14,8 @@ function Back({ href, children }) {
 export function BlogList() {
   return (
     <main className="page">
-      <header className="topbar indent"><Back href="#/">Home</Back></header>
-      <section className="section indent page-head">
+      <header className="topbar"><Back href="#/">Home</Back></header>
+      <section className="section wide page-head">
         <Label>Blog</Label>
         <p className="muted">Notes on building, AI and security.</p>
         <div className="rows rows--posts">
@@ -39,15 +39,15 @@ export function Post({ slug }) {
   if (!post) return <NotFound />;
   return (
     <main className="page">
-      <header className="topbar indent"><Back href="#/blog">All posts</Back></header>
-      <article className="section indent page-head">
+      <header className="topbar"><Back href="#/blog">All posts</Back></header>
+      <article className="section wide page-head">
         <h2 className="label mono">{post.date}</h2>
         <h1 className="post-title">
           {prefersReducedMotion() ? post.title : <DecryptedText text={post.title} animateOn="view" speed={30} maxIterations={10} sequential revealDirection="start" />}
         </h1>
         <div className="prose">{post.body.map((b, i) => <Block key={i} b={b} />)}</div>
       </article>
-      <nav className="indent post-nav"><Back href="#/blog">All posts</Back></nav>
+      <nav className="post-nav"><Back href="#/blog">All posts</Back></nav>
       <Footer signature={false} />
     </main>
   );
@@ -56,8 +56,8 @@ export function Post({ slug }) {
 export function NotFound() {
   return (
     <main className="page">
-      <header className="topbar indent"><Back href="#/">Home</Back></header>
-      <section className="section indent page-head">
+      <header className="topbar"><Back href="#/">Home</Back></header>
+      <section className="section wide page-head">
         <h2 className="label mono">404</h2>
         <h1 className="post-title">Lost in the shell</h1>
         <p className="muted" style={{ marginTop: 16 }}>That page doesn't exist. Try the <a className="inline-link" href="#/">home page</a> or press <span className="kbd">/</span> for the terminal.</p>

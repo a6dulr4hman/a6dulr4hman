@@ -5,7 +5,7 @@ import { asset } from '../lib';
 
 export default function Ventures() {
   return (
-    <section className="section indent" id="ventures">
+    <section className="section wide" id="ventures">
       <Reveal><Label>Ventures</Label></Reveal>
       <Reveal delay={0.05}>
         <a className="row row--venture cursor-target" href="https://www.farz.app/" target="_blank" rel="noopener">

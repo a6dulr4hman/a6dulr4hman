@@ -321,3 +321,7 @@ section[id] { scroll-margin-top: 24px; }
 .term-form { display: flex; gap: 8px; align-items: center; }
 .term-form input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: inherit; caret-color: #28c840; padding: 0; }
 .kbd:is(span) { cursor: default; }
+
+/* Wider sections: full content column, with a smaller hover bleed */
+.wide { --bleed: 16px; }
+.prose { max-width: 680px; }

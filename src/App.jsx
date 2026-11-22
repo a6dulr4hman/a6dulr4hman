@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import ClickSpark from './components/reactbits/ClickSpark';
 import TargetCursor from './components/reactbits/TargetCursor';
-import Noise from './components/reactbits/Noise';
 import Home from './components/Home';
 import Terminal from './components/Terminal';
 import { BlogList, Post, NotFound } from './components/Pages';
@@ -46,7 +45,6 @@ export default function App() {
       {page}
       <Terminal open={term} onClose={closeTerm} />
       {!calm && <TargetCursor targetSelector=".cursor-target" cursorColor="#ffffff" spinDuration={2.5} hideDefaultCursor showLabel={false} />}
-      {!calm && <Noise opacity={0.05} fixed zIndex={90} fps={18} />}
     </ClickSpark>
   );
 }

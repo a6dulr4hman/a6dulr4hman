@@ -17,7 +17,7 @@ export function PostRow({ post }) {
 
 export default function BlogSection() {
   return (
-    <section className="section indent" id="blog">
+    <section className="section wide" id="blog">
       <Reveal><Label>Blog</Label></Reveal>
       <Reveal delay={0.05}><p className="muted">Notes on building, AI and security.</p></Reveal>
       <Reveal delay={0.1}>
