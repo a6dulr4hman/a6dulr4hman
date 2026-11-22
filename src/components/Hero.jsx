@@ -5,6 +5,7 @@ import DecryptedText from './reactbits/DecryptedText';
 import ScrollVelocity from './reactbits/ScrollVelocity';
 import { prefersReducedMotion } from '../lib';
 import { useMedia } from '../hooks/useMedia';
+import Clock from './Clock';
 
 const ROLES = ['AI ENGINEER', 'CYBERSECURITY ENGINEER', 'STUDENT @ UOWD', 'BUILDING FALAK.ME', 'FULL-STACK DEVELOPER'];
 
@@ -64,7 +65,7 @@ export default function Hero({ ready }) {
 
         <div className="hero-top mono">
           <span>portfolio · 2026</span>
-          <span className="hero-live"><i /> live from dubai</span>
+          <span className="hero-live"><i /> <Clock /></span>
         </div>
 
         <div className="hero-center">
@@ -82,7 +83,7 @@ export default function Hero({ ready }) {
 
         <div className="hero-bottom mono">
           <span className="hero-visitor">{visitor}</span>
-          <button type="button" className="hero-scroll cursor-target" onClick={() => document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' })}>
+          <button type="button" className="hero-scroll cursor-target" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
             scroll <span className="hero-arrow">↓</span>
           </button>
         </div>

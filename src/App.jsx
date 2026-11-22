@@ -4,6 +4,8 @@ import TargetCursor from './components/reactbits/TargetCursor';
 import Home from './components/Home';
 import Terminal from './components/Terminal';
 import Boot from './components/Boot';
+import BackgroundGrid from './components/BackgroundGrid';
+import ScrollProgress from './components/ScrollProgress';
 import { BlogList, Post, NotFound } from './components/Pages';
 import { useHashRoute } from './hooks/useHashRoute';
 import { prefersReducedMotion } from './lib';
@@ -52,6 +54,8 @@ export default function App() {
 
   return (
     <ClickSpark sparkColor="#ffffff" sparkSize={9} sparkRadius={22} sparkCount={8} duration={450} style={{ minHeight: '100vh', height: 'auto' }}>
+      <BackgroundGrid />
+      <ScrollProgress />
       {page}
       <Terminal open={term} onClose={closeTerm} />
       {booting && <Boot onDone={finishBoot} />}

@@ -14,13 +14,14 @@ export default function Footer({ signature = true }) {
   }, [signature]);
 
   return (
-    <footer className="footer">
+    <footer className="footer wrap">
       {signature && (
         <svg ref={ref} className={`signature${draw ? ' draw' : ''}`} viewBox="0 0 143 25" width="148" height="25" role="img" aria-label="AbdulRahman">
           <path pathLength="1" d={SIGNATURE_PATH} />
         </svg>
       )}
       <p className="copyright">Copyright 2026 © AbdulRahman Maniar</p>
+      <p className="copyright mono hint">press <span className="kbd">/</span> for the terminal</p>
     </footer>
   );
 }

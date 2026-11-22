@@ -1,7 +1,7 @@
-import LogoLoop from './reactbits/LogoLoop';
-import Label from './ui/Label';
-import Reveal from './ui/Reveal';
-import { asset } from '../lib';
+import LogoLoop from '../reactbits/LogoLoop';
+import SectionHead from '../ui/SectionHead';
+import Reveal from '../ui/Reveal';
+import { asset } from '../../lib';
 
 const TOOLS = [
   { name: 'Gemini', href: 'https://gemini.google.com/', img: 'img/stack-gemini.png', white: true },
@@ -15,24 +15,26 @@ const TOOLS = [
   { name: 'Music', href: 'https://music.apple.com/', img: 'img/stack-music.webp' },
   { name: 'MacBook Air', href: 'https://www.apple.com/ae/macbook-air/', img: 'img/stack-macbook.png', white: true, contain: true },
 ];
+const SKILLS = ['Python', 'JavaScript', 'Solidity', 'SQL', 'Docker', 'Linux', 'Git', 'Self-hosting', 'React', 'PostgreSQL', 'Machine Learning', 'Static analysis'];
 
-const logos = TOOLS.map((t) => ({
+const tools = TOOLS.map((t) => ({
   node: (
     <a className={`tool cursor-target${t.white ? ' tool--white' : ''}`} href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
-      <img className={t.contain ? 'contain' : ''} src={asset(t.img)} alt="" width="40" height="40" />
+      <img className={t.contain ? 'contain' : ''} src={asset(t.img)} alt="" width="56" height="56" />
     </a>
   ),
   title: t.name,
 }));
+const skills = SKILLS.map((s) => ({ node: <span className="skill">{s}</span>, title: s }));
 
-// A slow, draggable loop of the tools I use (React Bits LogoLoop).
-export default function Stack() {
+export default function Skills() {
   return (
-    <section className="section" id="stack">
-      <Reveal><Label>Stack</Label></Reveal>
-      <Reveal delay={0.05}>
-        <div className="stack-viewport">
-          <LogoLoop logos={logos} speed={45} gap={41} logoHeight={40} pauseOnHover fadeOut fadeOutWidth={0.06} ariaLabel="Tools I use" />
+    <section className="block" id="stack">
+      <div className="wrap"><SectionHead num="03" label="Stack" title={<>The <span className="outline">toolbox.</span></>} sub="What I build with, day to day." /></div>
+      <Reveal>
+        <div className="loops">
+          <LogoLoop logos={tools} speed={55} gap={36} logoHeight={56} pauseOnHover fadeOut fadeOutWidth={0.08} ariaLabel="Tools I use" />
+          <LogoLoop logos={skills} speed={45} gap={14} logoHeight={44} direction="right" pauseOnHover fadeOut fadeOutWidth={0.08} ariaLabel="Languages and skills" />
         </div>
       </Reveal>
     </section>

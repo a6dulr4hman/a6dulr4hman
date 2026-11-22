@@ -4,13 +4,13 @@ import Icon from './ui/Icon';
 import { useMedia } from '../hooks/useMedia';
 
 const ITEMS = [
-  { id: 'intro', icon: 'person', label: 'Intro' },
+  { id: 'top', icon: 'bolt', label: 'Top' },
+  { id: 'about', icon: 'person', label: 'About' },
   { id: 'work', icon: 'window', label: 'Work' },
-  { id: 'education', icon: 'cap', label: 'Education' },
   { id: 'stack', icon: 'stack', label: 'Stack', more: true },
   { id: 'ventures', icon: 'grid', label: 'Ventures', more: true },
   { id: 'blog', icon: 'pencil', label: 'Blog', more: true },
-  { id: 'personal', icon: 'bolt', label: 'Personal', more: true },
+  { id: 'personal', icon: 'cap', label: 'Personal', more: true },
   { id: 'contact', icon: 'mail', label: 'Contact', more: true },
 ];
 

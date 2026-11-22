@@ -30,9 +30,9 @@ function run(raw, { close }) {
   switch (cmd) {
     case '': return [];
     case 'help': case '?': return HELP;
-    case 'whoami': return ['abdulrahman maniar', 'student · AI and cybersecurity engineer · Dubai, UAE 🇦🇪', 'currently building: Falak.me'];
-    case 'projects': return ['Falak Orion S1   — AI-powered security', 'Farz Wealth      — wealth management', 'Smart contract audits, dashboards and more: scroll up to Work'];
-    case 'stack': return ['Gemini · Claude Code · GitHub · Framer · Azure · JetBrains · Lark', '(and a MacBook Air that has seen things)'];
+    case 'whoami': return ['abdulrahman maniar', 'student · AI and cybersecurity engineer · Dubai, UAE 🇦🇪', 'fintech infra · Web3 security · self-hosted systems', 'currently building: Falak.me'];
+    case 'projects': return ['SecuraBlock      — Web3 smart contract auditor (Python, Solidity, ML)', 'Horizon          — neobank-style OS for student orgs', 'Falak Orion S1   — empowering security with AI', 'GardenX/ClarityAI — Falak campus ops + student LLM', 'Farz Wealth      — wealth management (venture)'];
+    case 'stack': return ['Python · JS · Solidity · SQL · Docker · Linux · Git · Claude Code · Gemini', '(and a MacBook Air that has seen things)'];
     case 'blog': return [...POSTS.map((p) => `  ${p.date}  ${p.title}`), '', 'type "open blog" to go there'];
     case 'open blog': setTimeout(() => { window.location.hash = '#/blog'; close(); }, 300); return ['opening blog...'];
     case 'contact': return [`email     ${EMAIL}`, 'phone     +971 54 754 5175', 'github    github.com/a6dulr4hman', 'linkedin  /in/abdulrahman-maniar'];
