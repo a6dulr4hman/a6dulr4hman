@@ -5,7 +5,7 @@ import { asset } from '../lib';
 
 const TOOLS = [
   { name: 'Gemini', href: 'https://gemini.google.com/', img: 'img/stack-gemini.png', white: true },
-  { name: 'Antigravity', href: 'https://antigravity.google/', img: 'img/stack-antigravity.png', white: true },
+  { name: 'Claude Code', href: 'https://claude.com/product/claude-code', img: 'img/stack-claude-code.svg' },
   { name: 'GitHub', href: 'https://github.com/', img: 'img/stack-github.webp' },
   { name: 'Framer', href: 'https://framer.com/', img: 'img/stack-framer.webp' },
   { name: 'Azure', href: 'http://azure.microsoft.com/', img: 'img/stack-azure.png', white: true },

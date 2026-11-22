@@ -32,7 +32,7 @@ function run(raw, { close }) {
     case 'help': case '?': return HELP;
     case 'whoami': return ['abdulrahman maniar', 'student · AI and cybersecurity engineer · Dubai, UAE 🇦🇪', 'currently building: Falak.me'];
     case 'projects': return ['Falak Orion S1   — AI-powered security', 'Farz Wealth      — wealth management', 'Smart contract audits, dashboards and more: scroll up to Work'];
-    case 'stack': return ['Gemini · Antigravity · GitHub · Framer · Azure · JetBrains · Lark', '(and a MacBook Air that has seen things)'];
+    case 'stack': return ['Gemini · Claude Code · GitHub · Framer · Azure · JetBrains · Lark', '(and a MacBook Air that has seen things)'];
     case 'blog': return [...POSTS.map((p) => `  ${p.date}  ${p.title}`), '', 'type "open blog" to go there'];
     case 'open blog': setTimeout(() => { window.location.hash = '#/blog'; close(); }, 300); return ['opening blog...'];
     case 'contact': return [`email     ${EMAIL}`, 'phone     +971 54 754 5175', 'github    github.com/a6dulr4hman', 'linkedin  /in/abdulrahman-maniar'];

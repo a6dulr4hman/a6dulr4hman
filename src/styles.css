@@ -239,10 +239,6 @@ section[id] { scroll-margin-top: 24px; }
 .dock .icon { transition: stroke .2s ease; }
 
 /* Lightbox */
-.lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(0,0,0,.85); padding: 24px; }
-.lightbox[hidden] { display: none; }
-.lightbox img { max-width: min(1200px, 100%); max-height: 100%; border-radius: 12px; }
-.lightbox button { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); cursor: pointer; }
 
 
 /* ───────────── Tablet 810–1199 ───────────── */
@@ -325,3 +321,10 @@ section[id] { scroll-margin-top: 24px; }
 /* Wider sections: full content column, with a smaller hover bleed */
 .wide { --bleed: 16px; }
 .prose { max-width: 680px; }
+
+/* Lightbox (rendered in a portal, full viewport) */
+.lightbox { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 32px; background: rgba(8, 8, 8, 0.94); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); animation: fadein .2s ease; cursor: zoom-out; }
+.lightbox-frame { padding: 5px; background: #fff; border-radius: 14px; box-shadow: 0 30px 90px rgba(0,0,0,.6); cursor: default; animation: pop .25s ease; max-width: min(1100px, 100%); max-height: 100%; }
+.lightbox-frame img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(100vh - 84px); border-radius: 9px; }
+.lightbox-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); color: var(--text); cursor: pointer; transition: background-color .2s ease; }
+.lightbox-close:hover { background: var(--surface-2); }

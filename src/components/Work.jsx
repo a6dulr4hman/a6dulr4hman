@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import DotGrid from './reactbits/DotGrid';
 import Label from './ui/Label';
 import Reveal from './ui/Reveal';
@@ -55,9 +56,11 @@ export default function Work() {
 
   useEffect(() => {
     if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const onKey = (e) => e.key === 'Escape' && setOpen(null);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
   }, [open]);
 
   return (
@@ -77,11 +80,14 @@ export default function Work() {
         </div>
       </div>
 
-      {open && (
-        <div className="lightbox" onClick={() => setOpen(null)} role="dialog" aria-modal="true">
-          <img src={asset(open.img)} alt={open.alt} />
-          <button type="button" aria-label="Close" className="cursor-target">✕</button>
-        </div>
+      {open && createPortal(
+        <div className="lightbox" onClick={() => setOpen(null)} role="dialog" aria-modal="true" aria-label={open.alt}>
+          <div className="lightbox-frame" onClick={(e) => e.stopPropagation()}>
+            <img src={asset(open.img)} alt={open.alt} />
+          </div>
+          <button type="button" aria-label="Close" className="lightbox-close cursor-target" onClick={() => setOpen(null)}>✕</button>
+        </div>,
+        document.body
       )}
     </>
   );
