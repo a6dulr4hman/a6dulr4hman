@@ -21,7 +21,6 @@ export default function Footer({ signature = true }) {
         </svg>
       )}
       <p className="copyright">Copyright 2026 © AbdulRahman Maniar</p>
-      <p className="copyright mono hint">press <span className="kbd">/</span> for the terminal</p>
     </footer>
   );
 }

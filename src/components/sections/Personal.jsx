@@ -14,7 +14,7 @@ const PHOTOS = [
 export default function Personal() {
   return (
     <section className="block wrap" id="personal">
-      <SectionHead num="06" label="Personal" title={<>Off the <span className="outline">clock.</span></>} sub="In my spare time, I enjoy listening to music and taking photos with my iPhone 11." />
+      <SectionHead num="06" label="Personal" title={<>Off the <span className="outline">clock.</span></>} sub="In my spare time, I enjoy listening to music and taking photos with my iPhone 17." />
 
       <Reveal distance={30}>
         <SpotlightCard className="spotify-wrap" spotlightColor="rgba(30, 215, 96, 0.5)" intensity={0.18} spotlightSize={300} style={{ padding: 0 }}>
@@ -34,7 +34,7 @@ export default function Personal() {
             </div>
           ))}
         </div>
-        <p className="mono muted photos-caption">Shot on iPhone 11</p>
+        <p className="mono muted photos-caption">Shot on iPhone 17</p>
       </Reveal>
     </section>
   );

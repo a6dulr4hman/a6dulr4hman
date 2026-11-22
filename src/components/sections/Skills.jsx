@@ -5,7 +5,7 @@ import { asset } from '../../lib';
 
 const TOOLS = [
   { name: 'Gemini', href: 'https://gemini.google.com/', img: 'img/stack-gemini.png', white: true },
-  { name: 'Claude Code', href: 'https://claude.com/product/claude-code', img: 'img/stack-claude-code.svg' },
+  { name: 'Claude Code', href: 'https://claude.com/product/claude-code', img: 'img/claude-code-color.svg', tile: 'cream' },
   { name: 'GitHub', href: 'https://github.com/', img: 'img/stack-github.webp' },
   { name: 'Framer', href: 'https://framer.com/', img: 'img/stack-framer.webp' },
   { name: 'Azure', href: 'http://azure.microsoft.com/', img: 'img/stack-azure.png', white: true },
@@ -19,7 +19,7 @@ const SKILLS = ['Python', 'JavaScript', 'Solidity', 'SQL', 'Docker', 'Linux', 'G
 
 const tools = TOOLS.map((t) => ({
   node: (
-    <a className={`tool cursor-target${t.white ? ' tool--white' : ''}`} href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
+    <a className={`tool cursor-target${t.white ? ' tool--white' : ''}${t.tile ? ` tool--${t.tile}` : ''}`} href={t.href} target="_blank" rel="noopener" aria-label={t.name}>
       <img className={t.contain ? 'contain' : ''} src={asset(t.img)} alt="" width="56" height="56" />
     </a>
   ),

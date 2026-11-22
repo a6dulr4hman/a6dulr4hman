@@ -61,7 +61,7 @@ export function NotFound() {
         <Back href="#/">Home</Back>
         <p className="mono muted" style={{ marginTop: 48 }}>404</p>
         <h1 className="h2">Lost in the <span className="outline">shell.</span></h1>
-        <p className="sub" style={{ marginTop: 16 }}>That page doesn't exist. Head <a className="inline-link" href="#/">home</a> or press <span className="kbd">/</span> for the terminal.</p>
+        <p className="sub" style={{ marginTop: 16 }}>That page doesn't exist. Head <a className="inline-link" href="#/">home</a>.</p>
       </main>
       <Footer signature={false} />
     </>

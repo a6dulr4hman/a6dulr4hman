@@ -15,7 +15,7 @@ const ITEMS = [
 ];
 
 // Floating section nav. Icons are magnetic on desktop; on mobile it collapses behind a "+".
-export default function Dock({ onTerminal }) {
+export default function Dock() {
   const [open, setOpen] = useState(false);
   const mobile = useMedia('(max-width: 809.98px)');
   const go = (id) => {
@@ -35,10 +35,6 @@ export default function Dock({ onTerminal }) {
       {mobile && open && <div className="dock-row dock-row--extra">{ITEMS.filter((i) => i.more).map(btn)}</div>}
       <div className="dock-row">
         {(mobile ? ITEMS.filter((i) => !i.more) : ITEMS).map((it) => wrap(btn(it), it.id))}
-        {wrap(
-          <button type="button" className="dock-btn cursor-target" aria-label="Secret terminal" title="Terminal ( / )" onClick={onTerminal}>
-            <Icon name="terminal" size={24} />
-          </button>, 'term')}
         {mobile && (
           <button type="button" className="dock-btn cursor-target" aria-label="More sections" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <Icon name="plus" size={24} />

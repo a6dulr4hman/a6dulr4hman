@@ -9,7 +9,7 @@ import Contact from './sections/Contact';
 import Footer from './Footer';
 import Dock from './Dock';
 
-export default function Home({ onTerminal, ready }) {
+export default function Home({ ready }) {
   return (
     <>
       <Hero ready={ready} />
@@ -23,7 +23,7 @@ export default function Home({ onTerminal, ready }) {
         <Contact />
       </main>
       <Footer />
-      <Dock onTerminal={onTerminal} />
+      <Dock />
     </>
   );
 }
