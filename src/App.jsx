@@ -3,6 +3,7 @@ import ClickSpark from './components/reactbits/ClickSpark';
 import TargetCursor from './components/reactbits/TargetCursor';
 import Home from './components/Home';
 import Terminal from './components/Terminal';
+import Boot from './components/Boot';
 import { BlogList, Post, NotFound } from './components/Pages';
 import { useHashRoute } from './hooks/useHashRoute';
 import { prefersReducedMotion } from './lib';
@@ -13,6 +14,15 @@ export default function App() {
   const closeTerm = useCallback(() => setTerm(false), []);
   const openTerm = useCallback(() => setTerm(true), []);
   const calm = prefersReducedMotion();
+  // Boot sequence: home page only, once per session, never for reduced-motion.
+  const [booting, setBooting] = useState(() => {
+    if (calm || window.location.hash.replace(/^#\/?/, '') !== '') return false;
+    try { return !sessionStorage.getItem('boot-seen'); } catch { return true; }
+  });
+  const finishBoot = useCallback(() => {
+    try { sessionStorage.setItem('boot-seen', '1'); } catch { /* private mode */ }
+    setBooting(false);
+  }, []);
 
   // "/" opens the secret terminal (unless you're typing somewhere).
   useEffect(() => {
@@ -35,7 +45,7 @@ export default function App() {
   }, []);
 
   let page;
-  if (route === '') page = <Home onTerminal={openTerm} />;
+  if (route === '') page = <Home onTerminal={openTerm} ready={!booting} />;
   else if (route === 'blog') page = <BlogList />;
   else if (route.startsWith('blog/')) page = <Post slug={route.slice(5)} />;
   else page = <NotFound />;
@@ -44,6 +54,7 @@ export default function App() {
     <ClickSpark sparkColor="#ffffff" sparkSize={9} sparkRadius={22} sparkCount={8} duration={450} style={{ minHeight: '100vh', height: 'auto' }}>
       {page}
       <Terminal open={term} onClose={closeTerm} />
+      {booting && <Boot onDone={finishBoot} />}
       {!calm && <TargetCursor targetSelector=".cursor-target" cursorColor="#ffffff" spinDuration={2.5} hideDefaultCursor showLabel={false} />}
     </ClickSpark>
   );
