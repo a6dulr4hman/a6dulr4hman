@@ -170,6 +170,32 @@ img { display: block; }
 .row-label { flex: 1; color: var(--muted); }
 .row-value { color: var(--muted); margin-right: -4px; }
 
+/* Blog */
+.rows--posts { margin-top: 16px; }
+.row--post { padding-block: 16px; gap: 16px; }
+.row--post .row-text { gap: 0; }
+.row-desc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row--all { height: 40px; }
+.row--all .row-label { color: var(--muted); }
+.row--all:hover .row-label { color: var(--text); }
+.back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); transition: color .2s ease; }
+.back:hover { color: var(--text); }
+.back .icon { transform: rotate(-135deg); }
+.page-head { margin-top: 40px; }
+.post-title { margin-top: 16px; font-size: 24px; line-height: 32px; letter-spacing: -0.01em; font-weight: 500; color: var(--text); }
+.post-meta { margin-top: 8px; }
+.prose { margin-top: 32px; }
+.prose > * + * { margin-top: 16px; }
+.prose p, .prose li { color: #b8b8b8; }
+.prose h2 { margin-top: 32px; font-size: 18px; line-height: 28px; font-weight: 500; color: var(--text); letter-spacing: 0; }
+.prose ul { padding-left: 20px; list-style: disc; }
+.prose a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255,255,255,.3); }
+.prose a:hover { text-decoration-color: var(--text); }
+.prose code { font-family: var(--font-mono); font-size: 13px; background: var(--surface-2); padding: 1px 6px; border-radius: 6px; }
+.prose pre { margin-block: 16px; padding: 16px; background: var(--surface); border-radius: 12px; overflow-x: auto; }
+.prose pre code { background: none; padding: 0; }
+.post-nav { margin-top: 48px; }
+
 /* Spotify card */
 .spotify { display: block; margin-top: 16px; padding: 6px; background: var(--surface); border-radius: 12px; }
 .spotify-track { display: flex; align-items: center; gap: 16px; padding: 8px; background: var(--surface-2); border-radius: 8px; }

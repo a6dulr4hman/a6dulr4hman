@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Building this site by hand · AbdulRahman Maniar</title>
+  <meta name="description" content="Why I swapped a site-builder export for plain HTML and CSS.">
+  <meta property="og:title" content="Building this site by hand · AbdulRahman Maniar">
+  <meta property="og:description" content="Why I swapped a site-builder export for plain HTML and CSS.">
+  <meta property="og:image" content="../assets/img/og.png">
+  <link rel="icon" href="../assets/img/favicon.png">
+  <link rel="preload" href="../assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/geist-mono.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M 13 0 L 0 13 M 13 0 L 3 0 M 13 0 L 13 10" transform="translate(5.5 5.5)"/></symbol>
+  </defs></svg>
+  <main class="page">
+    <header class="topbar indent">
+      <a class="back mono" href="index.html"><svg class="icon stroke" width="16" height="16"><use href="#i-arrow"/></svg>All posts</a>
+    </header>
+
+    <article class="section indent page-head">
+      <h2 class="label mono">Nov 2026</h2>
+      <h1 class="post-title">Building this site by hand</h1>
+      <div class="prose">
+        <p>This site started as a site-builder export, which looked right but was hard to edit. I rebuilt it by hand as plain HTML, CSS and a little JavaScript, so adding a section is just copying a block of markup.</p>
+        <h2>What changed</h2>
+        <ul>
+          <li>No build step and no framework: open <code>index.html</code> and edit it</li>
+          <li>Design tokens live in one place at the top of the stylesheet</li>
+          <li>Everything is served from local files, with no third-party requests</li>
+        </ul>
+        <p>This is placeholder text. Replace it with your own write-up.</p>
+      </div>
+    </article>
+    <nav class="indent post-nav"><a class="back mono" href="index.html"><svg class="icon stroke" width="16" height="16"><use href="#i-arrow"/></svg>All posts</a></nav>
+
+    <footer class="footer">
+      <p class="copyright">Copyright 2026 © AbdulRahman Maniar</p>
+    </footer>
+  </main>
+</body>
+</html>

@@ -40,6 +40,7 @@
       <symbol id="n-cap" viewBox="0 0 24 24"><path d="M 18 7.203 L 18 12.042 L 11 16 L 4 12.042 L 4 7.203 M 20.9 9.012 L 20.9 13.312 M 0 5.249 L 10.508 0.113 C 10.818 -0.038 11.182 -0.038 11.492 0.113 L 22 5.249 L 11.492 10.384 C 11.182 10.535 10.818 10.535 10.508 10.384 Z" transform="translate(1 4)"/></symbol>
       <symbol id="n-stack" viewBox="0 0 24 24"><path d="M 20 9 L 10 14 L 0 9 M 20 13 L 10 18 L 0 13 M 0 5 L 10 0 L 20 5 L 10 10 Z" transform="translate(2 3)"/></symbol>
       <symbol id="n-grid" viewBox="0 0 24 24"><path d="M 0 1 C 0 0.448 0.448 0 1 0 L 6 0 C 6.552 0 7 0.448 7 1 L 7 6 C 7 6.552 6.552 7 6 7 L 1 7 C 0.448 7 0 6.552 0 6 Z" transform="translate(3 3)"/><path d="M 0 1 C 0 0.448 0.448 0 1 0 L 6 0 C 6.552 0 7 0.448 7 1 L 7 6 C 7 6.552 6.552 7 6 7 L 1 7 C 0.448 7 0 6.552 0 6 Z" transform="translate(3 14)"/><path d="M 0 1 C 0 0.448 0.448 0 1 0 L 6 0 C 6.552 0 7 0.448 7 1 L 7 6 C 7 6.552 6.552 7 6 7 L 1 7 C 0.448 7 0 6.552 0 6 Z" transform="translate(14 3)"/><path d="M 0 1 C 0 0.448 0.448 0 1 0 L 6 0 C 6.552 0 7 0.448 7 1 L 7 6 C 7 6.552 6.552 7 6 7 L 1 7 C 0.448 7 0 6.552 0 6 Z" transform="translate(14 14)"/></symbol>
+      <symbol id="n-pencil" viewBox="0 0 24 24"><path d="M 9 17.097 L 18 17.097 M 13.52 0.617 L 0.993 13.124 L 0 17.097 L 3.973 16.104 L 16.5 3.597 C 17.323 2.774 17.323 1.44 16.5 0.617 C 15.677 -0.206 14.343 -0.206 13.52 0.617 Z" transform="translate(3 3.903)"/></symbol>
       <symbol id="n-bolt" viewBox="0 0 24 24"><path d="M 0.111 11.12 L 8.451 0 L 7.451 8 L 15.277 8 C 15.743 8 15.998 8.544 15.699 8.902 L 6.451 20 L 7.451 12 L 0.551 12 C 0.098 12 -0.161 11.483 0.111 11.12 Z" transform="translate(4.549 2)"/></symbol>
       <symbol id="n-mail" viewBox="0 0 24 24"><path d="M 17.5 0.5 L 9 8 L 0.5 0.5 M 1 14 L 17 14 C 17.552 14 18 13.552 18 13 L 18 1 C 18 0.448 17.552 0 17 0 L 1 0 C 0.448 0 0 0.448 0 1 L 0 13 C 0 13.552 0.448 14 1 14 Z" transform="translate(3 5)"/></symbol>
       <symbol id="n-plus" viewBox="0 0 24 24"><path d="M 8 0 L 8 16 M 0 8 L 16 8" transform="translate(4 4)"/></symbol>
@@ -125,6 +126,16 @@
       </a>
     </section>
 
+    <!-- ───────── Blog ───────── -->
+    <section class="section indent" id="blog">
+      <h2 class="label mono">Blog</h2>
+      <p class="muted">Notes on building, AI and security.</p>
+      <div class="rows rows--posts">
+        <a class="row row--post" href="blog/building-this-site.html"><span class="row-text"><span class="row-title">Building this site by hand</span><span class="muted row-desc">Nov 2026 · Why I swapped a site-builder export for plain HTML and CSS.</span></span><svg class="icon stroke arrow" width="24" height="24"><use href="#i-arrow"/></svg></a><a class="row row--post" href="blog/hello-world.html"><span class="row-text"><span class="row-title">Hello, world</span><span class="muted row-desc">Nov 2026 · A first post. Notes on what I plan to write about here.</span></span><svg class="icon stroke arrow" width="24" height="24"><use href="#i-arrow"/></svg></a>
+        <a class="row row--all" href="blog/index.html"><span class="row-label">All posts</span><svg class="icon stroke arrow" width="20" height="20"><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
+
     <!-- ───────── Personal ───────── -->
     <section class="section" id="personal">
       <h2 class="label mono">Personal</h2>
@@ -172,8 +183,8 @@
 
   <!-- Floating section nav -->
   <nav class="dock" id="dock" aria-label="Sections">
-    <div class="dock-row dock-row--extra"><a href="#stack" aria-label="Stack"><svg class="icon stroke" width="24" height="24"><use href="#n-stack"/></svg></a><a href="#ventures" aria-label="Ventures"><svg class="icon stroke" width="24" height="24"><use href="#n-grid"/></svg></a><a href="#personal" aria-label="Personal"><svg class="icon stroke" width="24" height="24"><use href="#n-bolt"/></svg></a><a href="#contact" aria-label="Contact"><svg class="icon stroke" width="24" height="24"><use href="#n-mail"/></svg></a></div>
-    <div class="dock-row"><a href="#intro" aria-label="Intro"><svg class="icon stroke" width="24" height="24"><use href="#n-person"/></svg></a><a href="#work" aria-label="Work"><svg class="icon stroke" width="24" height="24"><use href="#n-window"/></svg></a><a href="#education" aria-label="Education"><svg class="icon stroke" width="24" height="24"><use href="#n-cap"/></svg></a><a class="dock-desk" href="#stack" aria-label="Stack"><svg class="icon stroke" width="24" height="24"><use href="#n-stack"/></svg></a><a class="dock-desk" href="#ventures" aria-label="Ventures"><svg class="icon stroke" width="24" height="24"><use href="#n-grid"/></svg></a><a class="dock-desk" href="#personal" aria-label="Personal"><svg class="icon stroke" width="24" height="24"><use href="#n-bolt"/></svg></a><a class="dock-desk" href="#contact" aria-label="Contact"><svg class="icon stroke" width="24" height="24"><use href="#n-mail"/></svg></a><button class="dock-more" type="button" aria-label="More sections" aria-expanded="false"><svg class="icon stroke" width="24" height="24"><use href="#n-plus"/></svg></button></div>
+    <div class="dock-row dock-row--extra"><a href="#stack" aria-label="Stack"><svg class="icon stroke" width="24" height="24"><use href="#n-stack"/></svg></a><a href="#ventures" aria-label="Ventures"><svg class="icon stroke" width="24" height="24"><use href="#n-grid"/></svg></a><a href="#blog" aria-label="Blog"><svg class="icon stroke" width="24" height="24"><use href="#n-pencil"/></svg></a><a href="#personal" aria-label="Personal"><svg class="icon stroke" width="24" height="24"><use href="#n-bolt"/></svg></a><a href="#contact" aria-label="Contact"><svg class="icon stroke" width="24" height="24"><use href="#n-mail"/></svg></a></div>
+    <div class="dock-row"><a href="#intro" aria-label="Intro"><svg class="icon stroke" width="24" height="24"><use href="#n-person"/></svg></a><a href="#work" aria-label="Work"><svg class="icon stroke" width="24" height="24"><use href="#n-window"/></svg></a><a href="#education" aria-label="Education"><svg class="icon stroke" width="24" height="24"><use href="#n-cap"/></svg></a><a class="dock-desk" href="#stack" aria-label="Stack"><svg class="icon stroke" width="24" height="24"><use href="#n-stack"/></svg></a><a class="dock-desk" href="#ventures" aria-label="Ventures"><svg class="icon stroke" width="24" height="24"><use href="#n-grid"/></svg></a><a class="dock-desk" href="#blog" aria-label="Blog"><svg class="icon stroke" width="24" height="24"><use href="#n-pencil"/></svg></a><a class="dock-desk" href="#personal" aria-label="Personal"><svg class="icon stroke" width="24" height="24"><use href="#n-bolt"/></svg></a><a class="dock-desk" href="#contact" aria-label="Contact"><svg class="icon stroke" width="24" height="24"><use href="#n-mail"/></svg></a><button class="dock-more" type="button" aria-label="More sections" aria-expanded="false"><svg class="icon stroke" width="24" height="24"><use href="#n-plus"/></svg></button></div>
   </nav>
 
   <div class="lightbox" id="lightbox" hidden><img alt=""><button type="button" aria-label="Close">✕</button></div>
