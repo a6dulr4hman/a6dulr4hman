@@ -33,7 +33,7 @@ function useVisitor() {
   return info;
 }
 
-export default function Hero({ ready }) {
+export default function Hero({ ready, journey = false }) {
   const ref = useRef(null);
   const calm = prefersReducedMotion();
   const small = useMedia('(max-width: 809.98px)');
@@ -53,8 +53,8 @@ export default function Hero({ ready }) {
 
   return (
     <>
-      <section className={`hero${ready ? ' hero--in' : ''}`} ref={ref} id="top">
-        {!calm && (
+      <section className={`hero${ready ? ' hero--in' : ''}${journey ? ' hero--journey' : ''}`} ref={ref} id="top">
+        {!calm && !journey && (
           <div className="hero-bg" aria-hidden="true">
             <FaultyTerminal tint="#b9c4ff" brightness={0.45} scale={small ? 1.6 : 1.2} digitSize={small ? 1.1 : 1.4} timeScale={0.25}
               scanlineIntensity={0.35} glitchAmount={1} flickerAmount={0.6} curvature={0.12} mouseReact mouseStrength={0.25}
@@ -71,8 +71,7 @@ export default function Hero({ ready }) {
         <div className="hero-center">
           <p className="hero-kicker mono"><span className="prompt">&gt;</span> hello, world. i'm</p>
           <h1 className="hero-name" aria-label="AbdulRahman Maniar">
-            {name('ABDUL')}
-            {name('RAHMAN')}
+            {journey ? name('ABDULRAHMAN') : <>{name('ABDUL')}{name('RAHMAN')}</>}
           </h1>
           <p className="hero-role mono" aria-live="off">
             <span className="prompt">&gt;</span>{' '}

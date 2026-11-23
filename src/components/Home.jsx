@@ -9,10 +9,10 @@ import Contact from './sections/Contact';
 import Footer from './Footer';
 import Dock from './Dock';
 
-export default function Home({ ready }) {
+export default function Home({ ready, journey }) {
   return (
     <>
-      <Hero ready={ready} />
+      <Hero ready={ready} journey={journey} />
       <main>
         <About />
         <Projects />
