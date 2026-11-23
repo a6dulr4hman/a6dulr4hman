@@ -8,8 +8,11 @@ import Personal from './sections/Personal';
 import Contact from './sections/Contact';
 import Footer from './Footer';
 import Dock from './Dock';
+import JourneyA11y from './JourneyA11y';
 
 export default function Home({ ready, journey }) {
+  // With the 3D flight on, every section lives inside the world; only a hidden, plain copy stays in the DOM.
+  if (journey) return (<><JourneyA11y /><Dock /></>);
   return (
     <>
       <Hero ready={ready} journey={journey} />

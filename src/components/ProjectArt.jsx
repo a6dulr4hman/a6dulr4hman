@@ -70,7 +70,7 @@ const GLYPHS = {
 };
 
 // colours sampled from the brand tiles; `ink` is the glyph/text colour, `cut` the knock-out colour inside glyphs
-const ART = {
+export const ART = {
   gardenx:      { g: ['#07f59a', '#3b8f68'], ink: '#fff', glyph: 'leaf' },
   academy:      { g: ['#2f66f0', '#7a3fe6'], ink: '#fff', glyph: 'cap' },
   clarityai:    { g: ['#058a7a', '#08cfc4'], ink: '#fff', glyph: 'lens' },
@@ -81,7 +81,7 @@ const ART = {
   threatweaver: { g: ['#000000', '#16161a'], ink: '#fff', glyph: 'shield' },
   orion:        { g: ['#1a2a8c', '#3b82f6'], ink: '#fff', glyph: 'orbit' },
   horizon:      { g: ['#ff9a5a', '#7a3cff'], ink: '#fff', glyph: 'horizon' },
-  farz:         { g: ['#1b202c', '#4a5266'], ink: '#fff', logo: 'img/farz.png' },
+  farz:         { g: ['#26304a', '#5a6a94'], ink: '#fff', logo: 'img/farz.png' },
 };
 
 export default function ProjectArt({ id, name, kind, compact = false }) {

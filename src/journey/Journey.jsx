@@ -2,12 +2,15 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { buildAircraft } from './aircraft';
 import { loadA380 } from './a380';
+import { buildSections, STOPS, at } from './sections';
+import { registerNav } from './nav';
 import { asset } from '../lib';
 import { buildWorld } from './world';
 import { curve, KNOTS, GROUND, sampleShot, samplePalette, makePaletteState, phaseAt, smooth, clamp01 } from './path';
 import { PROJECTS } from '../data/projects';
 
 const PLANE_SCALE = 0.24;
+const MAX_U_SPEED = 0.16;   // max fraction of the whole path per second (~800 units/s)
 const TRAIL = 150;
 const Y = new THREE.Vector3(0, 1, 0);
 
@@ -16,6 +19,7 @@ const fmt = (n, w) => String(Math.round(n)).padStart(w, '0');
 // Fixed full-screen canvas. Page scroll -> position along the flight path.
 export default function Journey({ ready, onFail }) {
   const mountRef = useRef(null);
+  const spacerRef = useRef(null);
   const hudRef = useRef({});
   const readyRef = useRef(ready);
   useEffect(() => { readyRef.current = ready; }, [ready]);
@@ -35,6 +39,7 @@ export default function Journey({ ready, onFail }) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.5, 9000);
     const world = buildWorld(scene, { mobile, projects: PROJECTS });
+    let sections = null;
     // The built-in procedural plane is only a fallback: it stays hidden while the A380 model loads,
     // and is shown if the file fails to load or takes too long.
     let plane = buildAircraft();
@@ -44,6 +49,7 @@ export default function Journey({ ready, onFail }) {
     let gone = false;
     const useFallback = () => { if (!gone && plane.fallback !== false) plane.group.visible = true; };
     const fallbackTimer = setTimeout(useFallback, 7000);
+    buildSections(scene, { mobile, rings: world.rings }).then((sec) => { if (gone) return; sections = sec; }).catch(() => {});
     loadA380(asset('models/a380.glb'), { bottom: -GROUND / PLANE_SCALE }).then((p) => {
       if (gone) return;
       clearTimeout(fallbackTimer);
@@ -67,30 +73,37 @@ export default function Journey({ ready, onFail }) {
       l.frustumCulled = false; scene.add(l); return { l, p, last: new THREE.Vector3(1e9, 0, 0), n: 0 };
     });
 
-    // ── scroll → u mapping (re-measured when the layout changes) ──
+    // ── scroll → u mapping ──
+    // The page is just a tall spacer. Each [u, vh] step says how many viewport-heights of scrolling it takes
+    // to reach that point on the path; sections get slow "dwell" steps so you have time to read them.
+    const PLAN = [[0, 0], [0.144, 1.5], [0.156, 0.9], [0.288, 0.8], [0.512, 4.4], [0.568, 0.5], [0.582, 0.9], [0.672, 0.65], [0.688, 0.9],
+      [0.772, 0.65], [0.788, 0.9], [0.872, 0.65], [0.888, 1.0], [0.992, 0.9], [1.0, 1.2]];
+    const TOTAL_VH = PLAN.reduce((a, [, v]) => a + v, 0);
     let anchors = [{ s: 0, u: 0 }, { s: 1, u: 1 }];
     const measure = () => {
-      const maxS = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const out = [];
-      for (const [id, u] of KNOTS) {
-        let s;
-        if (id === 'top') s = 0;
-        else if (id === 'contact') s = maxS;
-        else { const el = document.getElementById(id); if (!el) continue; const r = el.getBoundingClientRect(); s = r.top + window.scrollY + r.height / 2 - window.innerHeight / 2; }
-        s = Math.min(Math.max(s, 0), maxS);
-        if (out.length && s <= out[out.length - 1].s) s = out[out.length - 1].s + 1;
-        out.push({ s, u });
-      }
-      anchors = out.length > 1 ? out : anchors;
+      const vh = window.innerHeight; let acc = 0;
+      anchors = PLAN.map(([pu, v]) => { acc += v * vh; return { s: acc, u: pu }; });
+      if (spacerRef.current) spacerRef.current.style.height = `${Math.round(acc + vh)}px`;
     };
     const uForScroll = (y) => {
       if (y <= anchors[0].s) return anchors[0].u;
       for (let i = 0; i < anchors.length - 1; i++) {
         const a = anchors[i], b = anchors[i + 1];
-        if (y <= b.s) return a.u + (b.u - a.u) * ((y - a.s) / (b.s - a.s));
+        if (y <= b.s) return a.u + (b.u - a.u) * ((y - a.s) / Math.max(1, b.s - a.s));
       }
       return 1;
     };
+    const scrollForU = (target) => {
+      for (let i = 0; i < anchors.length - 1; i++) {
+        const a = anchors[i], b = anchors[i + 1];
+        if (target <= b.u) return a.s + (b.s - a.s) * ((target - a.u) / Math.max(1e-6, b.u - a.u));
+      }
+      return anchors[anchors.length - 1].s;
+    };
+    const unregisterNav = registerNav((id) => {
+      const stop = STOPS.find((x) => x.id === id); if (!stop) return false;
+      window.scrollTo({ top: scrollForU(stop.nav), behavior: 'smooth' }); return true;
+    });
     measure();
     const ro = new ResizeObserver(measure); ro.observe(document.body);
     const lateMeasure = setTimeout(measure, 1500);
@@ -102,15 +115,32 @@ export default function Journey({ ready, onFail }) {
     const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), planePos = new THREE.Vector3();
     const tan = new THREE.Vector3(), flat = new THREE.Vector3(), right = new THREE.Vector3(), upv = new THREE.Vector3(), tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
     const basis = new THREE.Matrix4();
+    const holdPos = new THREE.Vector3(), holdLook = new THREE.Vector3(), camOff = new THREE.Vector3(), lookOff = new THREE.Vector3();
+    const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    let hoverPanel = null;
     const mouse = { x: 0, y: 0, sx: 0, sy: 0 };
     let bank = 0, fov = 48, introT = 0, vu = 0, lastU = u, time = 0, frame = 0, first = true, raf = 0, lost = false;
 
-    const onMove = (e) => { mouse.x = (e.clientX / window.innerWidth - 0.5) * 2; mouse.y = (e.clientY / window.innerHeight - 0.5) * 2; };
+    const onMove = (e) => { mouse.x = (e.clientX / window.innerWidth - 0.5) * 2; mouse.y = (e.clientY / window.innerHeight - 0.5) * 2; ndc.set(e.clientX / window.innerWidth * 2 - 1, -(e.clientY / window.innerHeight * 2 - 1)); };
     const onResize = () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); measure();
     };
     const onLost = (e) => { e.preventDefault(); lost = true; onFail?.(); };
+    const pick = () => {
+      if (!sections) return null;
+      ray.setFromCamera(ndc, camera);
+      const hits = ray.intersectObjects(sections.interactive().map((p) => p.mesh), false);
+      if (!hits.length) return null;
+      const panel = hits[0].object.userData.panel;
+      return { panel, spot: panel.hit(hits[0].uv) };
+    };
+    const onClick = (e) => {
+      ndc.set((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1));
+      const hit = pick();
+      if (hit && hit.spot && hit.spot.action) hit.spot.action();
+    };
+    renderer.domElement.addEventListener('click', onClick);
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('resize', onResize);
     renderer.domElement.addEventListener('webglcontextlost', onLost);
@@ -124,7 +154,8 @@ export default function Journey({ ready, onFail }) {
 
       // scroll -> target, eased so the plane keeps gliding after you stop
       const target = Number.isFinite(dbg) ? dbg : uForScroll(window.scrollY);
-      u += (target - u) * (first ? 1 : 1 - Math.exp(-dt * 3.4));
+      if (first) u = target;
+      else { const lim = MAX_U_SPEED * dt; u += THREE.MathUtils.clamp((target - u) * (1 - Math.exp(-dt * 3.4)), -lim, lim); }
       vu = dt > 0 ? (u - lastU) / dt : 0; lastU = u;
       if (readyRef.current) introT = Math.min(1, introT + dt / 2.8);
       const intro = smooth(introT);
@@ -163,10 +194,35 @@ export default function Journey({ ready, onFail }) {
       const wantPos = tmp.copy(planePos).addScaledVector(flat, f * k).addScaledVector(right, r * k + mouse.sx * 2.2).addScaledVector(Y, shot.up + (1 - intro) * 8 - mouse.sy * 1.2);
       wantPos.y = Math.max(wantPos.y, 1.3);
       const wantLook = tmp2.copy(planePos).addScaledVector(flat, shot.lf).addScaledVector(Y, shot.lu);
+      // section holds: while a section is in focus the camera frames its content (plane stays in frame)
+      let hw = 0, hold = null, hstop = null;
+      for (const st of STOPS) {
+        if (!st.hold) continue;
+        const w = 1 - smooth(clamp01((Math.abs(uu - st.u) - st.hold.half) / st.hold.ease));
+        if (w > hw) { hw = w; hold = st.hold; hstop = st; }
+      }
+      let baseFov = shot.fov;
+      if (hold && hw > 0.001) {
+        const uc = hstop.u + (uu - hstop.u) * hold.anchor;
+        at(uc, hold.cam[0], hold.cam[1], hold.cam[2], holdPos);
+        at(uc, hold.look[0], hold.look[1], hold.look[2], holdLook);
+        holdLook.lerp(planePos, hold.plane ?? 0.16);
+        wantPos.lerp(holdPos, hw); wantLook.lerp(holdLook, hw);
+        baseFov = shot.fov + (hold.fov - shot.fov) * hw;
+      }
       const kc = first ? 1 : 1 - Math.exp(-dt * 5.5);
-      camPos.lerp(wantPos, kc); camLook.lerp(wantLook, kc);
+      // Smooth the camera's *offset from the plane*, not its world position, so a fast-moving plane can never outrun it.
+      wantPos.sub(planePos); wantLook.sub(planePos);
+      // portrait / narrow screens: back the camera away from what it is framing so landscape panels still fit
+      const asp = window.innerWidth / window.innerHeight;
+      if (asp < 1.4) wantPos.sub(wantLook).multiplyScalar(Math.min(2.1, 1 + (1.4 / asp - 1) * 0.55)).add(wantLook);
+      camOff.lerp(wantPos, kc); lookOff.lerp(wantLook, kc);
+      camPos.copy(planePos).add(camOff); camLook.copy(planePos).add(lookOff);
+      camPos.y = Math.max(camPos.y, 1.3);
       camera.position.copy(camPos); camera.lookAt(camLook);
-      const wantFov = shot.fov + Math.min(10, Math.abs(vu) * 140);
+      const aspect = window.innerWidth / window.innerHeight;
+      const fit = aspect < 1.6 ? Math.min(1.45, Math.pow(1.6 / aspect, 0.45)) : 1;            // portrait / narrow: widen the view (together with the pull-back above)
+      const wantFov = Math.min(84, 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(baseFov) / 2) * fit) * 180 / Math.PI) + Math.min(6, Math.abs(vu) * 90);
       if (Math.abs(wantFov - fov) > 0.01) { fov += (wantFov - fov) * 0.08; camera.fov = fov; camera.updateProjectionMatrix(); }
       first = false;
 
@@ -186,6 +242,17 @@ export default function Journey({ ready, onFail }) {
       });
 
       world.update({ u: uu, time, cam: camera, planePos, pal });
+      if (sections) {
+        sections.update(camera);
+        if (frame % 2 === 0) {
+          const hit = pick();
+          const next = hit && hit.spot ? hit.panel : null;
+          if (hoverPanel && hoverPanel !== next) hoverPanel.setHover(null);
+          if (next) next.setHover(hit.spot.id);
+          hoverPanel = next;
+          renderer.domElement.style.cursor = next ? 'pointer' : '';
+        }
+      }
       renderer.render(scene, camera);
 
       // HUD (cheap DOM writes, not every frame)
@@ -204,7 +271,8 @@ export default function Journey({ ready, onFail }) {
     raf = requestAnimationFrame(tick);
 
     return () => {
-      gone = true; clearTimeout(fallbackTimer);
+      gone = true; clearTimeout(fallbackTimer); unregisterNav();
+      renderer.domElement.removeEventListener('click', onClick);
       cancelAnimationFrame(raf); clearTimeout(lateMeasure); ro.disconnect();
       window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', onResize);
       renderer.domElement.removeEventListener('webglcontextlost', onLost);
@@ -220,6 +288,7 @@ export default function Journey({ ready, onFail }) {
   return (
     <>
       <div className="journey" ref={mountRef} aria-hidden="true" />
+      <div className="journey-spacer" ref={spacerRef} aria-hidden="true" />
       <aside className="hud mono" aria-hidden="true">
         <div className="hud-row"><span>ALT</span><b ref={set('alt')}>00000</b><span>FT</span></div>
         <div className="hud-row"><span>SPD</span><b ref={set('spd')}>000</b><span>KT</span></div>

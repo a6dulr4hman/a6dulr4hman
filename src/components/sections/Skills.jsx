@@ -2,20 +2,8 @@ import LogoLoop from '../reactbits/LogoLoop';
 import SectionHead from '../ui/SectionHead';
 import Reveal from '../ui/Reveal';
 import { asset } from '../../lib';
+import { TOOLS, SKILLS } from '../../data/site';
 
-const TOOLS = [
-  { name: 'Gemini', href: 'https://gemini.google.com/', img: 'img/stack-gemini.png', white: true },
-  { name: 'Claude Code', href: 'https://claude.com/product/claude-code', img: 'img/claude-code-color.svg', tile: 'cream' },
-  { name: 'GitHub', href: 'https://github.com/', img: 'img/stack-github.webp' },
-  { name: 'Framer', href: 'https://framer.com/', img: 'img/stack-framer.webp' },
-  { name: 'Azure', href: 'http://azure.microsoft.com/', img: 'img/stack-azure.png', white: true },
-  { name: 'JetBrains', href: 'https://www.jetbrains.com/', img: 'img/stack-jetbrains.svg' },
-  { name: 'Ziina', href: 'https://join.ziina.com/FalakME', img: 'img/stack-ziina.png' },
-  { name: 'Lark', href: 'http://larksuite.com/', img: 'img/stack-lark.png' },
-  { name: 'Music', href: 'https://music.apple.com/', img: 'img/stack-music.webp' },
-  { name: 'MacBook Air', href: 'https://www.apple.com/ae/macbook-air/', img: 'img/stack-macbook.png', white: true, contain: true },
-];
-const SKILLS = ['Python', 'JavaScript', 'Solidity', 'SQL', 'Docker', 'Linux', 'Git', 'Self-hosting', 'React', 'PostgreSQL', 'Machine Learning', 'Static analysis'];
 
 const tools = TOOLS.map((t) => ({
   node: (

@@ -28,18 +28,16 @@ export const KNOTS = [
 
 // Chase-camera shots, in the plane's own frame (f = forward, r = right, up). Blended by u.
 export const SHOTS = [
-  { u: 0.0,  f: 22,  r: -17, up: 3.2,  lf: 0,  lu: 5.5, fov: 48 },  // hero: three-quarter front view, plane in the lower frame
+  { u: 0.0,  f: 26,  r: -9,  up: 3.2,  lf: 0,  lu: 5.5, fov: 48 },  // hero: three-quarter front view, plane in the lower frame
   { u: 0.05, f: 2,   r: -30, up: 5,    lf: 3,  lu: 2,   fov: 52 },  // takeoff roll, side view
   { u: 0.11, f: -26, r: -12, up: 7,    lf: 6,  lu: 2,   fov: 56 },  // lift-off chase
-  { u: 0.20, f: -34, r: 7,   up: 10,   lf: 10, lu: 2,   fov: 60 },  // through the clouds
-  { u: 0.34, f: -30, r: 0,   up: 6,    lf: 20, lu: 1,   fov: 62 },  // lining up on the gates
-  { u: 0.46, f: 15,  r: 24,  up: 5,    lf: 0,  lu: 1,   fov: 56 },  // head-on beside the gates
-  { u: 0.57, f: -26, r: -10, up: 16,   lf: 10, lu: 0,   fov: 58 },  // high behind
-  { u: 0.68, f: 2,   r: 36,  up: 4,    lf: 3,  lu: 1,   fov: 52 },  // side view above the clouds
-  { u: 0.78, f: -30, r: -6,  up: 9,    lf: 12, lu: 1,   fov: 60 },  // behind
-  { u: 0.88, f: 26,  r: -19, up: 4,    lf: 0,  lu: 2,   fov: 50 },  // over the island, from the front
-  { u: 0.95, f: -22, r: 12,  up: 5,    lf: 12, lu: 1,   fov: 56 },  // final approach
-  { u: 1.0,  f: 5,   r: -30, up: 2.4,  lf: 2,  lu: 2,   fov: 48 },  // rollout, side
+  // from here on it is a steady chase camera: behind, slightly above and to the left, looking ahead of the plane.
+  // Section "holds" (see sections.js) blend over this.
+  { u: 0.20, f: -30, r: -8,  up: 9,    lf: 18, lu: 2.5, fov: 58 },
+  { u: 0.29, f: -30, r: -8,  up: 9,    lf: 18, lu: 2.5, fov: 62 },  // wider while flying through the project gates
+  { u: 0.51, f: -30, r: -8,  up: 9,    lf: 18, lu: 2.5, fov: 62 },
+  { u: 0.57, f: -30, r: -8,  up: 9,    lf: 18, lu: 2.5, fov: 58 },
+  { u: 1.0,  f: -28, r: -9,  up: 8,    lf: 16, lu: 2.5, fov: 58 },
 ];
 
 // Sky/lighting mood along the journey: dusk → night → sunrise.
@@ -87,7 +85,7 @@ export const RING_RANGE = [0.305, 0.5];
 export function phaseAt(u) {
   if (u < 0.045) return 'TAKEOFF ROLL';
   if (u < 0.16) return 'CLIMB';
-  if (u < 0.30) return 'CLIMB · IMC';
+  if (u < 0.28) return 'CLIMB · IMC';
   if (u < 0.52) return 'GATES';
   if (u < 0.82) return 'CRUISE';
   if (u < 0.94) return 'DESCENT';

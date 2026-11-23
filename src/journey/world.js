@@ -294,11 +294,10 @@ export function buildWorld(scene, { mobile, projects }) {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(15, 0.45, 12, 72), new THREE.MeshBasicMaterial({ color, fog: false }));
     const halo = new THREE.Mesh(new THREE.TorusGeometry(15, 1.7, 8, 72), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.13, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
     const disc = new THREE.Mesh(new THREE.CircleGeometry(15, 48), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.05, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
-    const label = textSprite(p.name, p.kind, color); label.position.set(0, 22, 0);
-    g.add(ring, halo, disc, label);
+    g.add(ring, halo, disc);
     g.position.copy(pos);
     g.quaternion.setFromRotationMatrix(new THREE.Matrix4().lookAt(new THREE.Vector3(), tan.clone().negate(), up));
-    root.add(g); rings.push({ g, ring, halo, u, base: 1 });
+    root.add(g); rings.push({ g, ring, halo, u, base: 1, color });
   });
 
   // ── lights ──────────────────────────────────────────────────

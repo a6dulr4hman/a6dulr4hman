@@ -308,7 +308,9 @@ main, #root > div > main { position: relative; }
 }
 
 /* ───────────── 3D journey ───────────── */
-.journey { position: fixed; inset: 0; z-index: -2; background: #05060d; }
+.journey { position: fixed; inset: 0; z-index: 1; background: #05060d; }
+.journey-spacer { width: 1px; pointer-events: none; }
+.a11y-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .journey canvas { display: block; width: 100%; height: 100%; }
 .has-journey body { background: #05060d; }
 .has-journey .bg-grid { display: none; }

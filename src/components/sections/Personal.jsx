@@ -3,13 +3,8 @@ import SectionHead from '../ui/SectionHead';
 import Reveal from '../ui/Reveal';
 import Icon from '../ui/Icon';
 import { asset } from '../../lib';
+import { PHOTOS } from '../../data/site';
 
-const PHOTOS = [
-  { src: 'photos/photo-1.jpg', alt: 'Mountain lake', rot: -4 },
-  { src: 'photos/photo-2.jpg', alt: 'Coastal fort', rot: 3 },
-  { src: 'photos/photo-3.jpg', alt: 'Desert lake', rot: -3 },
-  { src: 'photos/photo-4.jpg', alt: 'Dubai skyline', rot: 4 },
-];
 
 export default function Personal() {
   return (

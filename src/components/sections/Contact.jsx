@@ -6,13 +6,8 @@ import Reveal from '../ui/Reveal';
 import Icon from '../ui/Icon';
 import { useCopyEmail } from './About';
 import { EMAIL, prefersReducedMotion } from '../../lib';
+import { LINKS } from '../../data/site';
 
-const LINKS = [
-  { icon: 'phone', label: 'Phone', value: '+971 54 754 5175', href: 'tel:+971547545175' },
-  { icon: 'github', label: 'GitHub', value: '@a6dulr4hman', href: 'https://github.com/a6dulr4hman', external: true },
-  { icon: 'linkedin', label: 'LinkedIn', value: '/in/abdulrahman-maniar', href: 'https://www.linkedin.com/in/abdulrahman-maniar/', external: true },
-  { icon: 'mail', label: 'Email', value: EMAIL, href: `mailto:${EMAIL}` },
-];
 
 export default function Contact() {
   const ref = useRef(null);
