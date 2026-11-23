@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { buildAircraft } from './aircraft';
+import { loadA380 } from './a380';
+import { asset } from '../lib';
 import { buildWorld } from './world';
 import { curve, KNOTS, GROUND, sampleShot, samplePalette, makePaletteState, phaseAt, smooth, clamp01 } from './path';
 import { PROJECTS } from '../data/projects';
@@ -33,9 +35,27 @@ export default function Journey({ ready, onFail }) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.5, 9000);
     const world = buildWorld(scene, { mobile, projects: PROJECTS });
-    const plane = buildAircraft();
+    // The built-in procedural plane is only a fallback: it stays hidden while the A380 model loads,
+    // and is shown if the file fails to load or takes too long.
+    let plane = buildAircraft();
     plane.group.scale.setScalar(PLANE_SCALE);
+    plane.group.visible = false;
     scene.add(plane.group);
+    let gone = false;
+    const useFallback = () => { if (!gone && plane.fallback !== false) plane.group.visible = true; };
+    const fallbackTimer = setTimeout(useFallback, 7000);
+    loadA380(asset('models/a380.glb'), { bottom: -GROUND / PLANE_SCALE }).then((p) => {
+      if (gone) return;
+      clearTimeout(fallbackTimer);
+      scene.remove(plane.group);
+      plane.group.traverse((o) => {
+        if (o.geometry) o.geometry.dispose();
+        if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { Object.values(m).forEach((v) => v && v.isTexture && v.dispose()); m.dispose(); });
+      });
+      p.group.scale.setScalar(PLANE_SCALE);
+      scene.add(p.group);
+      plane = p;
+    }).catch(() => { clearTimeout(fallbackTimer); useFallback(); });
 
     // wingtip contrails (additive, fade with age)
     const trails = [-1, 1].map(() => {
@@ -156,7 +176,7 @@ export default function Journey({ ready, onFail }) {
       trails.forEach((t, i) => {
         t.l.visible = high > 0.02;
         if (!t.l.visible) return;
-        tmp.set(i ? 40.2 : -40.2, 0.9, 24).applyMatrix4(plane.group.matrixWorld);
+        (plane.tips ? tmp.copy(plane.tips[i]) : tmp.set(i ? 40.2 : -40.2, 0.9, 24)).applyMatrix4(plane.group.matrixWorld);
         if (tmp.distanceTo(t.last) > 0.7) {
           t.p.copyWithin(3, 0, (TRAIL - 1) * 3); t.p.set([tmp.x, tmp.y, tmp.z], 0); t.last.copy(tmp);
           t.n = Math.min(TRAIL, t.n + 1);
@@ -184,6 +204,7 @@ export default function Journey({ ready, onFail }) {
     raf = requestAnimationFrame(tick);
 
     return () => {
+      gone = true; clearTimeout(fallbackTimer);
       cancelAnimationFrame(raf); clearTimeout(lateMeasure); ro.disconnect();
       window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', onResize);
       renderer.domElement.removeEventListener('webglcontextlost', onLost);
