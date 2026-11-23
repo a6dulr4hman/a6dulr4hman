@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Magnet from './reactbits/Magnet';
 import Icon from './ui/Icon';
 import { useMedia } from '../hooks/useMedia';
-import { navTo } from '../journey/nav';
 
 const ITEMS = [
   { id: 'top', icon: 'bolt', label: 'Top' },
@@ -21,7 +20,6 @@ export default function Dock() {
   const mobile = useMedia('(max-width: 809.98px)');
   const go = (id) => {
     setOpen(false);
-    if (navTo(id)) return;                       // 3D flight: scroll along the flight path
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
