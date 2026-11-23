@@ -228,7 +228,7 @@ export function buildWorld(scene, { mobile, projects }) {
     if (!protos.length) return;
     inst.visible = false;
     burjMats = bm; cityMat = material;
-    for (const [x, z, h] of [[-105, 540, 178], [-70, -5120, 165]]) { const b = burj.clone(true); b.scale.setScalar(h); b.position.set(x, 0, z); root.add(b); }
+    for (const [x, z, h] of [[-120, 640, 250], [-70, -5120, 235]]) { const b = burj.clone(true); b.scale.setScalar(h); b.position.set(x, 0, z); root.add(b); }
     const buckets = protos.map(() => []);
     const quat = new THREE.Quaternion(), sc = new THREE.Vector3(), pos = new THREE.Vector3(), eul = new THREE.Euler();
     buildings.slice(12).forEach(([x, , z, , h]) => {

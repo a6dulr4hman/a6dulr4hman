@@ -10,7 +10,9 @@ import { curve, KNOTS, GROUND, sampleShot, samplePalette, makePaletteState, phas
 import { PROJECTS } from '../data/projects';
 
 const PLANE_SCALE = 0.24;
-const MAX_U_SPEED = 0.16;   // max fraction of the whole path per second (~800 units/s)
+const MAX_U_SPEED = 0.05;   // the plane never flies faster than this fraction of the path per second (~250 units/s)
+const KEY_SCROLL = 0.27;    // holding an arrow key scrolls this many viewport-heights per second (a calm cruise)
+const KEY_FAST = 2.4;       // ...times this while Shift is held
 const TRAIL = 150;
 const Y = new THREE.Vector3(0, 1, 0);
 
@@ -141,6 +143,17 @@ export default function Journey({ ready, onFail }) {
       if (hit && hit.spot && hit.spot.action) hit.spot.action();
     };
     renderer.domElement.addEventListener('click', onClick);
+    // Holding ArrowDown/ArrowUp scrolls at a steady speed instead of the browser's fast key-repeat.
+    const keys = { dir: 0, shift: false };
+    const typing = (t) => /^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable;
+    const onKeyDown = (e) => {
+      if ((e.key !== 'ArrowDown' && e.key !== 'ArrowUp') || e.ctrlKey || e.metaKey || e.altKey || typing(e.target)) return;
+      e.preventDefault();
+      keys.dir = e.key === 'ArrowDown' ? 1 : -1; keys.shift = e.shiftKey;
+    };
+    const onKeyUp = (e) => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') keys.dir = 0; };
+    const onBlur = () => { keys.dir = 0; };
+    window.addEventListener('keydown', onKeyDown); window.addEventListener('keyup', onKeyUp); window.addEventListener('blur', onBlur);
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('resize', onResize);
     renderer.domElement.addEventListener('webglcontextlost', onLost);
@@ -149,7 +162,9 @@ export default function Journey({ ready, onFail }) {
     const tick = (now) => {
       raf = requestAnimationFrame(tick);
       if (document.hidden || lost) { prevT = now; return; }
-      const dt = Math.min(0.05, (now - prevT) / 1000); prevT = now;
+      const real = Math.min(0.25, (now - prevT) / 1000);              // true elapsed time, so key speed does not depend on frame rate
+      const dt = Math.min(0.05, real); prevT = now;
+      if (keys.dir) window.scrollTo({ top: window.scrollY + keys.dir * KEY_SCROLL * window.innerHeight * (keys.shift ? KEY_FAST : 1) * real, behavior: 'instant' });
       time += dt; frame++;
 
       // scroll -> target, eased so the plane keeps gliding after you stop
@@ -275,6 +290,7 @@ export default function Journey({ ready, onFail }) {
       renderer.domElement.removeEventListener('click', onClick);
       cancelAnimationFrame(raf); clearTimeout(lateMeasure); ro.disconnect();
       window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp); window.removeEventListener('blur', onBlur);
       renderer.domElement.removeEventListener('webglcontextlost', onLost);
       scene.traverse((o) => {
         if (o.geometry) o.geometry.dispose();
