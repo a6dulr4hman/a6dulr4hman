@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import DecryptedText from './reactbits/DecryptedText';
 
-const LINES = [
-  'initializing portfolio.kernel',
-  'loading assets ................ 100%',
-  'handshake with dubai-dc-01',
-  'verifying identity',
-];
+// Elegant intro: a monogram, a hairline that fills while fonts load, a coordinates caption,
+// then the curtain parts. Shown once per browser session. Click or press any key to skip.
+const MIN_MS = 1500;
 
-// A short "boot sequence" shown once per browser session. Click or press any key to skip.
 export default function Boot({ onDone }) {
-  const [shown, setShown] = useState(0);
-  const [granted, setGranted] = useState(false);
+  const [pct, setPct] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const done = useRef(false);
 
@@ -19,16 +13,25 @@ export default function Boot({ onDone }) {
     if (done.current) return;
     done.current = true;
     setLeaving(true);
-    setTimeout(onDone, 650);
+    setTimeout(onDone, 900);
   };
 
   useEffect(() => {
-    const timers = LINES.map((_, i) => setTimeout(() => setShown(i + 1), 260 + i * 320));
-    timers.push(setTimeout(() => setGranted(true), 260 + LINES.length * 320 + 100));
-    timers.push(setTimeout(finish, 260 + LINES.length * 320 + 1250));
+    let raf = 0; let fontsReady = false;
+    const t0 = performance.now();
+    (document.fonts?.ready ?? Promise.resolve()).then(() => { fontsReady = true; });
+    const tick = (now) => {
+      const t = Math.min(1, (now - t0) / MIN_MS);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const p = fontsReady ? eased : Math.min(eased, 0.88);   // hold just short of full until fonts are ready
+      setPct(Math.round(p * 100));
+      if (p >= 1) { setTimeout(finish, 180); return; }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
     const skip = () => finish();
     window.addEventListener('keydown', skip);
-    return () => { timers.forEach(clearTimeout); window.removeEventListener('keydown', skip); };
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('keydown', skip); };
   }, []);
 
   useEffect(() => {
@@ -39,15 +42,20 @@ export default function Boot({ onDone }) {
 
   return (
     <div className={`boot${leaving ? ' boot--out' : ''}`} onClick={finish} role="status" aria-label="Loading">
-      <div className="boot-inner">
-        {LINES.slice(0, shown).map((l) => (
-          <p key={l} className="boot-line"><span className="ok">[ OK ]</span> {l}</p>
-        ))}
-        <p className="boot-grant" aria-hidden={!granted}>
-          {granted && <><span className="prompt">&gt;</span> <DecryptedText text="ACCESS GRANTED" animateOn="view" speed={35} maxIterations={14} sequential revealDirection="start" characters="01#%&@" /></>}
-          <span className="boot-caret" />
-        </p>
-        <p className="boot-skip">click or press any key to skip</p>
+      <div className="boot-half boot-half--top" />
+      <div className="boot-half boot-half--bottom" />
+      <div className="boot-center">
+        <div className="boot-mark" aria-hidden="true">
+          <svg viewBox="0 0 120 120" width="112" height="112">
+            <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
+            <circle cx="60" cy="60" r="56" fill="none" stroke="#fff" strokeWidth="1.25" strokeLinecap="round" strokeDasharray="352" strokeDashoffset={352 - (352 * pct) / 100} transform="rotate(-90 60 60)" />
+          </svg>
+          <span className="boot-initials">AM</span>
+        </div>
+        <p className="boot-name">AbdulRahman Maniar</p>
+        <p className="boot-sub mono">Dubai · 25.2048° N, 55.2708° E</p>
+        <div className="boot-line"><i style={{ transform: `scaleX(${pct / 100})` }} /></div>
+        <p className="boot-pct mono">{String(pct).padStart(3, '0')}</p>
       </div>
     </div>
   );
