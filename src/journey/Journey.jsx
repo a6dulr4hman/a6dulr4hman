@@ -35,7 +35,10 @@ export default function Journey({ ready, onFail }) {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: !mobile, alpha: false, powerPreference: 'high-performance' });
     } catch { onFail?.(); return undefined; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.6));
+    // Adaptive resolution: start at a sensible pixel density and trade it for frame rate when frames run long.
+    const dprMax = Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.75), dprMin = mobile ? 0.7 : 0.9;
+    let dpr = dprMax, slow = 0, fast = 0;
+    renderer.setPixelRatio(dpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor('#05060d');
     mount.appendChild(renderer.domElement);
@@ -168,6 +171,12 @@ export default function Journey({ ready, onFail }) {
       const dt = Math.min(0.05, real); prevT = now;
       if (keys.dir) window.scrollTo({ top: window.scrollY + keys.dir * KEY_SCROLL * window.innerHeight * (keys.shift ? KEY_FAST : 1) * real, behavior: 'instant' });
       time += dt; frame++;
+      // frame-time watchdog (ignores the first seconds while textures and models upload)
+      if (frame > 120) {
+        if (real > 0.027) { slow++; fast = 0; } else if (real < 0.019) { fast++; slow = 0; } else { slow = 0; fast = 0; }
+        if (slow > 24 && dpr > dprMin) { dpr = Math.max(dprMin, dpr - 0.15); renderer.setPixelRatio(dpr); renderer.setSize(window.innerWidth, window.innerHeight); slow = 0; }
+        else if (fast > 240 && dpr < dprMax) { dpr = Math.min(dprMax, dpr + 0.1); renderer.setPixelRatio(dpr); renderer.setSize(window.innerWidth, window.innerHeight); fast = 0; }
+      }
 
       // scroll -> target, eased so the plane keeps gliding after you stop
       const target = Number.isFinite(dbg) ? dbg : uForScroll(window.scrollY);

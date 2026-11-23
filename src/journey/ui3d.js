@@ -97,6 +97,7 @@ export function button(ctx, p, id, label, x, y, w, h, { fill = '#fff', color = '
 }
 
 export class Panel {
+  static aniso = 8;   // lowered on phones (see sections.js)
   // w, h in world units; ppu = canvas pixels per world unit
   constructor({ w, h, ppu = 24, res = 1, draw, name = '', halo = ACCENT, billboard = false, maxFar = 1000, nearFull = 480, interactive = true, aspectFix = true }) {
     this.w = w; this.h = h; this.name = name; this.drawFn = draw; this.billboard = billboard; this.maxFar = maxFar; this.nearFull = nearFull; this.interactive = interactive;
@@ -109,7 +110,7 @@ export class Panel {
     this.canvas = document.createElement('canvas'); this.canvas.width = cw; this.canvas.height = ch;
     this.ctx = this.canvas.getContext('2d');
     this.texture = new THREE.CanvasTexture(this.canvas);
-    this.texture.colorSpace = THREE.SRGBColorSpace; this.texture.anisotropy = 8; this.texture.generateMipmaps = true; this.texture.minFilter = THREE.LinearMipmapLinearFilter;
+    this.texture.colorSpace = THREE.SRGBColorSpace; this.texture.anisotropy = Panel.aniso; this.texture.generateMipmaps = true; this.texture.minFilter = THREE.LinearMipmapLinearFilter;
     this.material = new THREE.MeshBasicMaterial({ map: this.texture, transparent: true, depthWrite: false, fog: false, toneMapped: false, side: THREE.DoubleSide });
     this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), this.material);
     this.mesh.userData.panel = this;

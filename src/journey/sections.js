@@ -63,6 +63,7 @@ export async function buildSections(scene, { mobile, rings }) {
   try { await Promise.all([document.fonts.load(`800 60px ${FONT}`), document.fonts.load(`400 30px ${MONO}`), document.fonts.load(`500 40px ${FONT}`)]); } catch { /* fonts optional */ }
 
   const q = mobile ? 0.62 : 1;                 // texture resolution factor
+  Panel.aniso = mobile ? 2 : 8;
   const root = new THREE.Group(); scene.add(root);
   const panels = [];
   const add = (p, pos, faceTo) => {

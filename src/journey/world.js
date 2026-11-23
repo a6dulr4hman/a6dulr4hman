@@ -223,26 +223,51 @@ export function buildWorld(scene, { mobile, projects }) {
   inst.frustumCulled = false; root.add(inst);
 
   // Real models replace the placeholder boxes once they load (the boxes stay as a fallback if loading fails).
+  // The city is split into square tiles. Each tile is frustum-culled, drawn as detailed models when close,
+  // as cheap boxes when far, and not at all beyond the fog.
   let cityMat = null, burjMats = [];
+  const chunks = [];
+  const LOD = mobile ? { detail: 650, cull: 3400 } : { detail: 1000, cull: 4800 };
   loadSkyline().then(({ burj, burjMats: bm, protos, material }) => {
     if (!protos.length) return;
     inst.visible = false;
     burjMats = bm; cityMat = material;
     for (const [x, z, h] of [[-120, 640, 250], [-70, -5120, 235]]) { const b = burj.clone(true); b.scale.setScalar(h); b.position.set(x, 0, z); root.add(b); }
-    const buckets = protos.map(() => []);
+    const TILE = 360;
+    const tiles = new Map();
+    buildings.slice(12).forEach((b) => {
+      const k = `${Math.floor(b[0] / TILE)},${Math.floor(b[2] / TILE)}`;
+      if (!tiles.has(k)) tiles.set(k, []);
+      tiles.get(k).push(b);
+    });
     const quat = new THREE.Quaternion(), sc = new THREE.Vector3(), pos = new THREE.Vector3(), eul = new THREE.Euler();
-    buildings.slice(12).forEach(([x, , z, , h]) => {
-      const pi = Math.min(protos.length - 1, Math.floor(Math.pow(Math.random(), 0.8) * protos.length));
-      const p = protos[pi];
-      const s = Math.min(1.15, Math.max(0.4, (h / p.h) * 0.95));
-      eul.set(0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0); quat.setFromEuler(eul);
-      buckets[pi].push(new THREE.Matrix4().compose(pos.set(x, 0, z), quat, sc.set(s, s, s)));
-    });
-    protos.forEach((p, i) => {
-      if (!buckets[i].length) return;
-      const im = new THREE.InstancedMesh(p.geometry, material, buckets[i].length);
-      buckets[i].forEach((m, k) => im.setMatrixAt(k, m)); im.frustumCulled = false; root.add(im);
-    });
+    const boxMat = inst.material;
+    for (const list of tiles.values()) {
+      const group = new THREE.Group(); const detail = new THREE.Group(); const far = new THREE.Group();
+      group.add(detail, far); root.add(group);
+      const buckets = protos.map(() => []);
+      const boxes = [];
+      let cx = 0, cz = 0;
+      for (const [x, , z, w, h, d] of list) {
+        cx += x; cz += z;
+        const pi = Math.min(protos.length - 1, Math.floor(Math.pow(Math.random(), 0.8) * protos.length));
+        const p = protos[pi];
+        const s = Math.min(1.15, Math.max(0.4, (h / p.h) * 0.95));
+        eul.set(0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0); quat.setFromEuler(eul);
+        buckets[pi].push(new THREE.Matrix4().compose(pos.set(x, 0, z), quat, sc.set(s, s, s)));
+        boxes.push(new THREE.Matrix4().makeScale(w, h, d).setPosition(x, h / 2, z));
+      }
+      protos.forEach((p, i) => {
+        if (!buckets[i].length) return;
+        const im = new THREE.InstancedMesh(p.geometry, material, buckets[i].length);
+        buckets[i].forEach((m, k) => im.setMatrixAt(k, m));
+        im.computeBoundingSphere(); im.frustumCulled = true; detail.add(im);
+      });
+      const lo = new THREE.InstancedMesh(bGeo, boxMat, boxes.length);
+      boxes.forEach((m, k) => lo.setMatrixAt(k, m));
+      lo.computeBoundingSphere(); lo.frustumCulled = true; far.add(lo);
+      chunks.push({ group, detail, far, c: new THREE.Vector3(cx / list.length, 40, cz / list.length), r: TILE * 0.8 + 90 });
+    }
   }).catch(() => { /* keep the placeholder boxes */ });
 
   // ── palm island under the descent ───────────────────────────
@@ -292,7 +317,7 @@ export function buildWorld(scene, { mobile, projects }) {
     vertexShader: /* glsl */ `
       attribute float size; attribute float shade; uniform float uScale; varying float vSh; varying float vD; varying vec3 vP;
       void main(){ vec4 mv = modelViewMatrix * vec4(position,1.); vSh = shade; vD = -mv.z; vP = (modelMatrix*vec4(position,1.)).xyz;
-        gl_PointSize = clamp(size * uScale / -mv.z, 0., 700.); gl_Position = projectionMatrix * mv; }`,
+        gl_PointSize = clamp(size * uScale / -mv.z, 0., ${mobile ? '320.' : '700.'}); gl_Position = projectionMatrix * mv; }`,
     fragmentShader: /* glsl */ `
       uniform sampler2D uMap; uniform vec3 uColor; uniform float uNight; varying float vSh; varying float vD; varying vec3 vP;
       ${FOG_GLSL}
@@ -331,6 +356,11 @@ export function buildWorld(scene, { mobile, projects }) {
 
   const sunDir = new THREE.Vector3();
   const update = ({ u, time, cam, planePos, pal }) => {
+    for (const k of chunks) {
+      const d = cam.position.distanceTo(k.c) - k.r;
+      k.group.visible = d < LOD.cull;
+      k.detail.visible = d < LOD.detail; k.far.visible = d >= LOD.detail;
+    }
     // sun glides from behind the hero shot to ahead of the landing
     const a = Math.min(1, Math.max(0, (u - 0.7) / 0.3));
     sunDir.set(-0.34 + a * 0.55, 0.07 + Math.sin(u * 3.1) * 0.03 - (u > 0.35 && u < 0.8 ? 0.3 : 0), 1 - a * 2).normalize();
