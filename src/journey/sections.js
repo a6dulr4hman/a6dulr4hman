@@ -6,6 +6,7 @@ import { PROJECTS } from '../data/projects';
 import { POSTS } from '../data/posts';
 import { ABOUT, TOOLS, SKILLS, VENTURE, SPOTIFY, PERSONAL_TEXT, PHOTOS, LINKS, ROLES } from '../data/site';
 import { asset, EMAIL } from '../lib';
+import { creditLine } from '../data/credits';
 
 // Every page section, rebuilt as objects inside the world the plane flies through.
 // Positions are expressed relative to a point on the flight path: [right, up, forward].
@@ -34,7 +35,7 @@ export const STOPS = [
   { id: 'ventures', u: 0.68, nav: 0.68, hold: { cam: [-6, 5, -36], look: [26, 6, 20], fov: 58, anchor: 0.3, half: 0.006, ease: 0.03 } },
   { id: 'blog', u: 0.78, nav: 0.78, hold: { cam: [-6, 6, -40], look: [26, 6, 26], fov: 60, anchor: 0.3, half: 0.006, ease: 0.03 } },
   { id: 'personal', u: 0.88, nav: 0.88, hold: { cam: [-8, 6, -46], look: [28, 4, 28], fov: 60, anchor: 0.3, half: 0.006, ease: 0.03 } },
-  { id: 'contact', u: 1.0, nav: 1.0, hold: { cam: [-30, 12, -46], look: [72, 27, 12], fov: 60, anchor: 0, half: 0.02, ease: 0.05, plane: 0.34 } },
+  { id: 'contact', u: 1.0, nav: 1.0, hold: { cam: [-30, 12, -46], look: [72, 34, 12], fov: 60, anchor: 0, half: 0.02, ease: 0.05, plane: 0.34 } },
 ];
 
 const open = (href, blank = true) => () => { if (blank) window.open(href, '_blank', 'noopener'); else window.location.href = href; };
@@ -384,11 +385,12 @@ export async function buildSections(scene, { mobile, rings }) {
           ctx.fillStyle = '#b9c4ff'; ctx.font = `500 56px ${FONT}`; ctx.textAlign = 'right'; ctx.fillText(l.top ? '↑' : '↗', x + cw - 36, y + 86); ctx.textAlign = 'left';
           pn.hot(`l${i}`, x, y, cw, chh, l.top ? () => window.scrollTo({ top: 0, behavior: 'smooth' }) : open(l.href, !!l.external));
         });
-        ctx.fillStyle = '#6f7390'; ctx.font = `400 28px ${MONO}`; ctx.fillText('COPYRIGHT 2026 © ABDULRAHMAN MANIAR', 100, 1130);
+        ctx.fillStyle = '#6f7390'; ctx.font = `400 26px ${MONO}`; ctx.fillText('COPYRIGHT 2026 © ABDULRAHMAN MANIAR', 100, 1118);
+        ctx.font = `400 21px ${MONO}`; ctx.fillText(creditLine(), 100, 1156);
       },
     });
-    add(p, at(1.0, 94.6, 30, 14), null);
-    p.group.lookAt(at(1.0, 0, 30, 14));                        // mounted flat on the facade, facing the runway
+    add(p, at(1.0, 94.6, 42, 14), null);
+    p.group.lookAt(at(1.0, 0, 42, 14));                        // mounted flat on the facade, facing the runway
   }
 
   // ── per-frame ───────────────────────────────────────────

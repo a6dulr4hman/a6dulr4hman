@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { curve, RING_RANGE, GROUND } from './path';
+import { loadSkyline } from './skyline';
 
 // The environment the plane flies through. buildWorld(scene, opts) returns { update(state) }.
 
@@ -221,6 +222,29 @@ export function buildWorld(scene, { mobile, projects }) {
   buildings.forEach(([x, y, z, w, h, d], i) => { m4.makeScale(w, h, d).setPosition(x, y, z); inst.setMatrixAt(i, m4); });
   inst.frustumCulled = false; root.add(inst);
 
+  // Real models replace the placeholder boxes once they load (the boxes stay as a fallback if loading fails).
+  let cityMat = null, burjMats = [];
+  loadSkyline().then(({ burj, burjMats: bm, protos, material }) => {
+    if (!protos.length) return;
+    inst.visible = false;
+    burjMats = bm; cityMat = material;
+    for (const [x, z, h] of [[-105, 540, 178], [-70, -5120, 165]]) { const b = burj.clone(true); b.scale.setScalar(h); b.position.set(x, 0, z); root.add(b); }
+    const buckets = protos.map(() => []);
+    const quat = new THREE.Quaternion(), sc = new THREE.Vector3(), pos = new THREE.Vector3(), eul = new THREE.Euler();
+    buildings.slice(12).forEach(([x, , z, , h]) => {
+      const pi = Math.min(protos.length - 1, Math.floor(Math.pow(Math.random(), 0.8) * protos.length));
+      const p = protos[pi];
+      const s = Math.min(1.15, Math.max(0.4, (h / p.h) * 0.95));
+      eul.set(0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0); quat.setFromEuler(eul);
+      buckets[pi].push(new THREE.Matrix4().compose(pos.set(x, 0, z), quat, sc.set(s, s, s)));
+    });
+    protos.forEach((p, i) => {
+      if (!buckets[i].length) return;
+      const im = new THREE.InstancedMesh(p.geometry, material, buckets[i].length);
+      buckets[i].forEach((m, k) => im.setMatrixAt(k, m)); im.frustumCulled = false; root.add(im);
+    });
+  }).catch(() => { /* keep the placeholder boxes */ });
+
   // ── palm island under the descent ───────────────────────────
   const palm = new THREE.Group();
   const sandMat = new THREE.MeshBasicMaterial({ color: '#2a2630' });
@@ -320,6 +344,8 @@ export function buildWorld(scene, { mobile, projects }) {
     gU.uNight.value = pal.night; gU.uTime.value = time;
     lightU.uNight.value = pal.night;
     bu.uBase.value.set('#12162a').lerp(pal.hor, 0.18);
+    if (cityMat) cityMat.emissiveIntensity = 0.12 + pal.night * 0.95;
+    for (const m of burjMats) m.emissiveIntensity = pal.night * 0.45;
     cU.uColor.value.copy(pal.cloud);
     sandMat.color.set('#2a2630').lerp(pal.hor, 0.12);
     hemi.color.copy(pal.top).lerp(new THREE.Color('#a9b8ff'), 0.6 + pal.night * 0.3); hemi.groundColor.copy(pal.fog).multiplyScalar(0.7); hemi.intensity = 1.15 + (1 - pal.night) * 0.5;

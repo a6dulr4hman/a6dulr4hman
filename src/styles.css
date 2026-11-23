@@ -338,3 +338,6 @@ main, #root > div > main { position: relative; }
 .jdot.on { background: #28c840; box-shadow: 0 0 8px #28c840; }
 @media (max-width: 1180px) { .hud { display: none; } }
 @media (max-width: 809.98px) { .jtoggle { bottom: 88px; right: 12px; padding: 8px 12px; font-size: 10px; } }
+
+.credits { margin-top: 8px; font-size: 11px; line-height: 16px; max-width: 760px; margin-inline: auto; }
+.credits a { text-decoration: underline; text-underline-offset: 2px; }

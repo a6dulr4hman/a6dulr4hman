@@ -1,5 +1,6 @@
 import { PROJECTS } from '../data/projects';
 import { POSTS } from '../data/posts';
+import { CREDITS } from '../data/credits';
 import { ABOUT, TOOLS, SKILLS, VENTURE, SPOTIFY, PERSONAL_TEXT, LINKS } from '../data/site';
 
 // When the 3D flight is on, the real content lives inside the world. This plain, visually hidden copy
@@ -24,6 +25,7 @@ export default function JourneyA11y() {
         <section id="contact"><h2>Contact</h2>
           <ul>{LINKS.map((l) => <li key={l.label}><a href={l.href}>{l.label}: {l.value}</a></li>)}</ul></section>
       </main>
+      <footer><p>3D models: {CREDITS.map((c) => <a key={c.what} href={c.href}>{c.what} by {c.by} ({c.license}). </a>)}</p></footer>
     </div>
   );
 }
