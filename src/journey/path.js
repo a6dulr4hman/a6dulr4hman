@@ -28,7 +28,7 @@ export const KNOTS = [
 
 // Chase-camera shots, in the plane's own frame (f = forward, r = right, up). Blended by u.
 export const SHOTS = [
-  { u: 0.0,  f: 26,  r: -9,  up: 3.2,  lf: 0,  lu: 9,   fov: 48 },  // hero: three-quarter front view, plane in the lower frame
+  { u: 0.0,  f: 34,  r: -11,  up: 3.2,  lf: 0,  lu: 9,   fov: 48 },  // hero: three-quarter front view, plane in the lower frame
   { u: 0.05, f: 2,   r: -30, up: 5,    lf: 3,  lu: 2,   fov: 52 },  // takeoff roll, side view
   { u: 0.11, f: -26, r: -12, up: 7,    lf: 6,  lu: 2,   fov: 56 },  // lift-off chase
   // from here on it is a steady chase camera: behind, slightly above and to the left, looking ahead of the plane.

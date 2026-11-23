@@ -11,6 +11,8 @@ import { PROJECTS } from '../data/projects';
 
 const PLANE_SCALE = 0.24;
 const MAX_U_SPEED = 0.05;   // the plane never flies faster than this fraction of the path per second (~250 units/s)
+const CHASE = 1.22;         // how far the chase camera sits from the plane (1 = the original distance)
+const CHASE_UP = 1.15;      // ...and how high above it
 const KEY_SCROLL = 0.27;    // holding an arrow key scrolls this many viewport-heights per second (a calm cruise)
 const KEY_FAST = 2.4;       // ...times this while Shift is held
 const TRAIL = 150;
@@ -203,10 +205,10 @@ export default function Journey({ ready, onFail }) {
       right.crossVectors(flat, Y).normalize();
       const orbit = Math.sin(time * 0.22) * 0.38 * (1 - clamp01(uu / 0.035));
       const co = Math.cos(orbit), so = Math.sin(orbit);
-      const f = (shot.f * co - shot.r * so) * 0.9, r = (shot.f * so + shot.r * co) * 0.9;
+      const f = (shot.f * co - shot.r * so) * CHASE, r = (shot.f * so + shot.r * co) * CHASE;
       const k = 1 + (1 - intro) * 1.7;                                        // opening dolly-in
       mouse.sx += (mouse.x - mouse.sx) * 0.05; mouse.sy += (mouse.y - mouse.sy) * 0.05;
-      const wantPos = tmp.copy(planePos).addScaledVector(flat, f * k).addScaledVector(right, r * k + mouse.sx * 2.2).addScaledVector(Y, shot.up + (1 - intro) * 8 - mouse.sy * 1.2);
+      const wantPos = tmp.copy(planePos).addScaledVector(flat, f * k).addScaledVector(right, r * k + mouse.sx * 2.2).addScaledVector(Y, shot.up * CHASE_UP + (1 - intro) * 8 - mouse.sy * 1.2);
       wantPos.y = Math.max(wantPos.y, 1.3);
       const wantLook = tmp2.copy(planePos).addScaledVector(flat, shot.lf).addScaledVector(Y, shot.lu);
       // section holds: while a section is in focus the camera frames its content (plane stays in frame)
